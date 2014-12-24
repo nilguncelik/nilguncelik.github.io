@@ -1,0 +1,35 @@
+name: Blog
+description:
+url:
+baseurl: "/"
+permalink: "/blog/:categories/:year/:month/:day/:title.html"
+paginate_path: "/blog/page:num/"
+relative_permalinks: true
+paginate: 5
+highlighter: pygments
+defaults:
+- scope:
+    path: ''
+    type: post
+  values:
+    layout: post
+- scope:
+    path: docs
+    type: page
+  values:
+    layout: docs
+exclude:
+- Gemfile
+- Gemfile.lock
+- README.md
+- Rakefile
+markdown: redcarpet
+redcarpet:
+  extensions:
+  - fenced_code_blocks
+  - tables
+sass:
+  style: :compressed
+  sass_dir: _css
+gems:
+- jekyll-redirect-from

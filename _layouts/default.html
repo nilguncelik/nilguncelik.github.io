@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{{ page.title }}</title>
+  <meta name="viewport" content="width=device-width">
+  <meta property="og:title" content="{{ page.title }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://nilguncelik.github.io/{{ page.url }}">
+  <meta property="og:image" content="http://nilguncelik.github.io/img/logo_og.png">
+  <meta property="og:description" content="">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}{{ site.baseurl }}/feed.xml">
+
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/codemirror.css">
+  <link rel="stylesheet" href="/css/blog.css">
+
+  <script type="text/javascript" src="//use.typekit.net/vqa1hcx.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <script type="text/javascript" src="/js/codemirror.js"></script>
+  <script type="text/javascript" src="/js/javascript.js"></script>
+  <script type="text/javascript" src="/js/showdown.js"></script>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="nav-main">
+      <div class="wrap">
+        <a class="nav-home" href="/index.html">
+          <!--<img class="nav-logo" src="/img/logo.svg" width="36" height="36">-->
+          Home
+        </a>
+        <ul class="nav-site">
+          <!--<li><a href="/blog/all.html"{% if page.sectionid == 'blog' %} class="active"{% endif %}>blog</a></li>-->
+        </ul>
+      </div>
+    </div>
+
+    {% if page.id == 'home' %}
+    <div class="hero">
+      <div class="wrap">
+        <div class="text"><strong>Welcome</strong></div>
+        <div class="minitext">
+          Under Construction
+        </div>
+
+        <div class="buttons-unit">
+          <!--<a href="/blog/all.html" class="button">My Blog</a>-->
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {{ content }}
+
+    <footer class="wrap">
+      <div class="left">
+        Theme adapted from <a href="http://facebook.github.io/react/" target="_blank">Facebook React Page</a> licensed under <a href="http://creativecommons.org/licenses/by/4.0/"  target="_blank">CC BY 4.0</a>.
+      </div>
+      <div class="right">
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
