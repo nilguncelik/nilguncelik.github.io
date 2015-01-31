@@ -7,7 +7,7 @@ public: true
 
 
 #### Function Definition Expression
-```
+```javascript
 function(x) { return x+1; }
 ```
 
@@ -24,7 +24,7 @@ function(x) { return x+1; }
 
 
 #### Function Declaration Statement
-```
+```javascript
 function f(x) { return x+1; }
 ```
 
@@ -82,7 +82,7 @@ function f(x) { return x+1; }
 - When a function needs a *static variable* whose value persists across invocations, it is often convenient to use a property of the function, instead of cluttering up the namespace by defining a global variable.
 - Suppose you want to write a function that returns a unique integer whenever it is invoked. The function must never return the same value twice:
 
-```
+```javascript
 uniqueInteger.counter = 0;
 function uniqueInteger() {
     return uniqueInteger.counter++;
@@ -102,7 +102,7 @@ function uniqueInteger() {
 	- All variable declarations in a function (*but not any associated assignments*) are hoisted to the top of the function.
 	- This causes variables to be visible even before they are declared.
 
-```
+```javascript
 // Function Scope
 function test(o) {
      var i = 0;                          // i is defined throughout the body of the function
@@ -166,7 +166,7 @@ function f() {
 	- simultaneously allow public access to methods while retaining privacy for variables defined within the function.
 	- avoid variable hoisting from within blocks
 
-```
+```javascript
 (function (myNamespace) {
 
     //Private Variable
@@ -199,7 +199,7 @@ function f() {
 
 #### Bind() Method (ES5)
 
-```
+```javascript
 var bindArguments = (
     !!Function.prototype.bind
 ) ?
@@ -221,13 +221,13 @@ function(context,delegate) {
 - Invoking the new function invokes the original function as a method of context.
 - It is also used for partial application (**currying**) in functional programming:
 
-```
+```javascript
 var sum = function(x,y) { return x + y };
 var succ = sum.bind(null, 1);
 succ(2)                                  // => 3
 ```
 
-```
+```javascript
 function f(y,z) { return this.x + y + z };
 var g = f.bind({x:1}, 2);
 g(3)                                     // => 6:
@@ -239,7 +239,7 @@ g(3)                                     // => 6:
 - Most browser vendors use native Javascript function objects for the methods of their host objects. Microsoft, however, has always used non-native callable objects for their client-side methods, and before IE 9 the typeof operator returns "object" for them, even though they behave like functions. In IE9 these client-side methods are now true native function objects.
 - The ES3 spec says that the ```typeof``` operator returns "function" for all native objects that are callable. The ES5 specification extends this to require that ```typeof``` return "function" for all callable objects, whether native objects or host objects.
 
-```
+```javascript
 function isTrueFunction(x) {
      return Object.prototype.toString.call(x) === "[object Function]";
 }
@@ -248,5 +248,5 @@ function isTrueFunction(x) {
 
 **References**
 
-<http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value/>
-[JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
+- <http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value/>
+- [JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
