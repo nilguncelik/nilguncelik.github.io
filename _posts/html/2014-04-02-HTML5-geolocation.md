@@ -10,19 +10,17 @@ public: true
 
 1. Browsers HTML5 feature
 
-		```javascript
-		if ("geolocation" in navigator) {   // geolocation supported
-		     navigator.geolocation.getCurrentPosition(function(position) {   // shows the popup at the top of the page.
-		          var latitude = position.coords.latitude;
-		          var longitude = position.coords.longitude;
-		          $.post('session_coordinates', { latitude: latitude, longitude: longitude }, function(){
-		               // do stuff
-		          })
-		     });
-		}
-		```
-
-
+	```javascript
+	if ("geolocation" in navigator) {   // geolocation supported
+	     navigator.geolocation.getCurrentPosition(function(position) {   // shows the popup at the top of the page.
+	          var latitude = position.coords.latitude;
+	          var longitude = position.coords.longitude;
+	          $.post('session_coordinates', { latitude: latitude, longitude: longitude }, function(){
+	               // do stuff
+	          })
+	     });
+	}
+	```
 2. Convert IP to a location using a service
 
 3. Buy a GeoIP database and bring it local.
