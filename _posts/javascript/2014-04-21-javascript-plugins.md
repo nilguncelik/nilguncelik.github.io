@@ -6,7 +6,14 @@ public: true
 ---
 
 
-# Graph Plugins
+
+### Select
+
+- [Selectize](https://github.com/brianreavis/selectize.js)
+
+
+
+### Graph Plugins
 
 - [D3.js](http://d3js.org/)
 	- D3.js is a JavaScript library for manipulating documents based on data.
@@ -21,6 +28,6 @@ public: true
 
 - [Chartist.JS](http://gionkunz.github.io/chartist-js/index.html)
 
-**References**
 
-[JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
+
+**References**
