@@ -12,11 +12,54 @@ public: true
 - Flux takes its name from the Latin word for flow.
 - It encourages centralized data stores, immutable objects, and single directional data flow in place of controllers, models, and bi-directional data bindings.
 - It works well with React because the objects are passed directly into React views for consumption, where they cannot be modified by the views themselves. When a view wants to change a piece of data, (perhaps based on user input), the view informs the store that something has changed, which will validate the input and then propagate the change out to the rest of the application. In this way, you never worry about incremental state mutation, or incremental updates, and every change that happens to the system (whether it comes from user input, an ajax response from the server, or anything else) goes through the exact same flow (which handles validation, batching, persisting, etc).
+	- The concept "Flux" is simply that your view triggers an event (say, after user types a name in a text field), that event updates a model, then the model triggers an event, and the view responds to that model's event by re-rendering with the latest data.
+	- This one way data flow / decoupled observer pattern is designed to guarantee that your source of truth always stays in your stores / models.
+	- Put all the async data loading on the action creators, and keep views/stores fully sync.
 
 	#### Stores
-- Moving the application logic into the central store layer makes it more testable, and it becomes easier to refactor the internal representation without breaking existing views. We also get a nice separation of concerns between the views and the data layer, something that React already encourages.
-- The concept "Flux" is simply that your view triggers an event (say, after user types a name in a text field), that event updates a model, then the model triggers an event, and the view responds to that model's event by re-rendering with the latest data.
-- This one way data flow / decoupled observer pattern is designed to guarantee that your source of truth always stays in your stores / models.
+	- Moving the application logic into the central store layer makes it more testable, and it becomes easier to refactor the internal representation without breaking existing views. We also get a nice separation of concerns between the views and the data layer, something that React already encourages.
+	- Each store should be a **singleton**. They should remain as independent and decoupled as possible - a self-contained universe that one can query from a Controller-View.
+	- A store manages application state and business logic for a logical domain
+	- Private variables hold the application data.
+	- The only road into the Store is through the callback it registers with the Dispatcher.
+	- The only road out is through getter functions. Stores also publish an event when their state has changed, so Controller-Views can know when to query for the new state, using the getters.
+
+```js
+// FooStore.js
+var _dispatchToken;
+var _messages =	{};
+class FooStore extends EventEmitter {  // extends EventEmitter to emit events with this.emit()
+	constructor()	{
+		super();
+		_dispatchToken = AppDispatcher.register((action)	=>	{
+			switch(action.type)	{
+				case ActionTypes.MESSAGE_CREATE:
+					var message =	{
+						id: Date.now(),
+						text: action.text
+					}
+					_messages[message.id]	= message;
+					this.emit('change');
+					break;
+				case ActionTypes.MESSAGE_DELETE:
+					delete _messages[action.messageID];
+					this.emit('change');
+					break;
+					default:
+						//	no	op
+			}
+		});
+	}
+	getDispatchToken()	{
+		return _dispatchToken;
+	}
+	getMessages()	{
+		return _messages;
+	}
+}
+module.exports = new FooStore();
+```
+
 
 	#### Controller-Views
 	- They are views often that are found at the top of the hierarchy that retrieve data from the stores and pass this data down to their children.
@@ -29,12 +72,10 @@ public: true
 
 	#### Dispatcher
 
-	- As an application grows, the dispatcher becomes more vital, as it can manage dependencies between stores by invoking the registered callbacks in a specific order. Stores can declaratively wait for other stores to finish updating, and then update themselves accordingly.
-	- The dispatcher is also able to manage dependencies between stores. This functionality is available through the Dispatcher's `waitFor()` method.
-	- The arguments for `waitFor()` are an array of dispatcher registry indexes, which we refer to here as each store's `dispatchToken`. When `waitFor()` is encountered in a callback, it tells the Dispatcher to invoke the callbacks for the required stores. After these callbacks complete, the original callback can continue to execute. Thus the store that is invoking `waitFor()` can depend on the state of another store to inform how it should update its own state.
-	- There should be only one channel for all state changes: The Dispatcher. This makes debugging easy because it just requires a single `console.log` in the dispatcher to observe every single state change trigger.
-
-
+	- The Dispatcher has the following primary API: dispatch(), register(), waitFor().
+	- The Dispatcher manage dependencies between stores by invoking the registered callbacks in a specific order. Stores can declaratively `waitFor()` other stores to finish updating, and then update themselves accordingly.
+	- The arguments for `waitFor()` are an array of dispatcher registry indexes, which is referred to as each store's `dispatchToken`. When `waitFor()` is encountered in a callback, it tells the Dispatcher to invoke the callbacks for the required stores. After these callbacks complete, the original callback can continue to execute. Thus the store that is invoking `waitFor()` can depend on the state of another store to inform how it should update its own state.
+	- In a Flux app there should only be one **singleton** Dispatcher. All data flows through this central hub. Having a singleton Dispatcher allows it to manage all Stores. This becomes important when you need Store #1 update itself, and then have Store #2 update itself based on both the Action and on the state of Store #1. Flux assumes this situation is an eventuality in a large application. This also makes debugging easy because it just requires a single `console.log` in the dispatcher to observe every single state change trigger.
 
 - This structure allows us to reason easily about our application in a way that is reminiscent of functional reactive programming, or more specifically data-flow programming or flow-based programming, where data flows through the application in a single direction — there are no two-way bindings. Application state is maintained only in the stores, allowing the different parts of the application to remain highly decoupled. Where dependencies do occur between stores, they are kept in a strict hierarchy, with synchronous updates managed by the dispatcher.
 
@@ -66,6 +107,40 @@ public: true
 	- Using `defer()`
 		- Using defer() to solve the dispatch-within-dispatch is a bit of a bandaid that just avoids the invariant without restructuring anything. If possible, I try to work around it using `waitFor()` and rethinking the way that data is split across different stores.
 
+	- Q: In my app, I make two ajax calls to for one piece of data. How Flux goes about this?
+		- <http://stackoverflow.com/questions/27947335/nesting-flux-data>
+		- Instead of trying to fire off an action in response to another action , back up and respond to the original action. If you don't yet have a complete set of data, and you need to make two calls to the server, **wait to fire the action until you have all the data you need to make a complete update to the system**. **Fire off the second call in the XHR success handler**, not in the view component. This way your XHR calls are independent of the dispatch cycle and you have moved application logic out of the view and into an area where it's more appropriately encapsulated.
+		- If you really want to update the app after the first call, then you can dispatch an action in the XHR success handler before making the second call.
+		- Ideally, you would handle all of this in a single call, but I understand that sometimes that's not possible if the web API is not under your control.
+		- **In a Flux app, one should not think of Actions as being things that can be chained together as a strict sequence of events. They should live independently of each other, and if you have the impulse to chain them, you probably need to back up and redesign how the app is responding to the original action**.
+
+
+- I have a scenario where I feel like I need to dispatch an action in response to another action, and I don't know the best way to sort it out.
+	- <http://stackoverflow.com/questions/26934953/dispatching-further-actions-when-handling-actions/27569490#27569490>
+	- You should look back how you are trying to create this flow. You say that you need to create an action in response to another action, right? So, let's name this the "ActionForwarderStore". We end up with a flow like this:
+
+		```
+    AuthAction --> Dispatcher --+--> UserStore
+                                |
+                                +--> ActionForwarderStore --+
+                                                            |
+               +--------------------------------------------+
+               |
+               +-> Dispatcher -----> RouteStore
+		```
+	- You see that you still have someone that understands that a `action1` should end up changing a route? This is the `ActionForwarderStore`. As Flux suggests that every Store listens to every Action, this knowledge of the `action1` ending up in a route change can go straight into `RouteStore`. Like this:
+
+		```
+    AuthAction --> Dispatcher --+--> UserStore
+                                |
+                                +--> RouteStore
+		```
+	- Remember that Flux was "created" in order to avoid the unpredictability of MVC. If you keep all your route changes into `RouteStore`, you just need to look at this Store code to understand what Actions will cause a route change. If you go in the way of creating an action in response to another action, you will only know that `NavigateAction` changes routes, and you will need to look at the other Stores to check which ones are triggering this Action in response to others.
+	- This is what Flux names as "unidirectional flow". It's easy to catch problems this way because this is the only flow allowed. If you click a button and it changes the route, you can know for sure that the action that the click dispatched is causing the route change, there are no cascading actions.
+
+
+
+
 - Asynchronous operations:
 	- [How do you manage asynchronous Store operations with Flux?](http://stackoverflow.com/questions/23635964/how-do-you-manage-asynchronous-store-operations-with-flux)
 	- Asynchronous actions that rely on Ajax, etc. shouldn't block the action from being dispatched to all subscribers.
@@ -82,10 +157,6 @@ public: true
 	- Call the WebAPIUtils from the store, instead of from the ActionCreators. This is fine as long as the response calls another ActionCreator, and is not handled by setting new data directly on the store. The important thing is for new data to originate with an action. It matters more how data enters the system than how data exits the system.
 	- <http://stackoverflow.com/questions/26295898/flux-architecture-misunderstanding-in-example-chat-app>
 	- There is no action to fetch data. We don’t have any action type that’s like fetch messages or anything like that. The store takes care of all the fetching for you. It might be doing it from a cache. It might be actually contacting the server. It might be making multiple server calls just to get the data you need.
-
-- Singleton Dispatcher and Stores
-	- In a Flux app there should only be one Dispatcher. All data flows through this central hub. Having a singleton Dispatcher allows it to manage all Stores. This becomes important when you need Store #1 update itself, and then have Store #2 update itself based on both the Action and on the state of Store #1. Flux assumes this situation is an eventuality in a large application. Ideally this situation would not need to happen, and developers should strive to avoid this complexity, if possible. But the singleton Dispatcher is ready to handle it when the time comes.
-	- Stores are singletons as well. They should remain as independent and decoupled as possible -- a self-contained universe that one can query from a Controller-View. The only road into the Store is through the callback it registers with the Dispatcher. The only road out is through getter functions. Stores also publish an event when their state has changed, so Controller-Views can know when to query for the new state, using the getters.
 
 - Flushing stores on routing / page change
 	- <http://stackoverflow.com/questions/23591325/in-flux-architecture-how-do-you-manage-store-lifecycle)>
@@ -153,6 +224,7 @@ public: true
 		- [flux actions vs props callbacks](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/reactjs/mBiK-n9_SPY/SvKZ7bn8HlwJ)
 
 - When should views render from `props`, versus rendering from data directly queried from stores?
+	- TR - <http://stackoverflow.com/questions/26563933/passing-store-state-as-props-or-each-component-accessing-global-stores>
 	- Seems like rendering from `props` is definitely the norm.
 	- Not having data as props makes it impossible to compare next props with prev props in shouldComponentUpdate().
 	- Use of `props` de-couples the views from the store.
@@ -172,45 +244,134 @@ public: true
 
 	- [Using the Navigation mixin in a Flux architecture versus the removed Router transition methods](https://github.com/rackt/react-router/issues/380)
 	- [In Flux architecture, how do you manage client side routing / url states?](http://stackoverflow.com/questions/23624651/in-flux-architecture-how-do-you-manage-client-side-routing-url-states/23636491#23636491)
-	- Way1: Let's say I have a component that creates a new post. I hit the create button and a component responds by firing off an action. I use Router.transitionTo in either the action or store layers when the action was successful.
-	- Way2: Make the routing layer just another store. This means that all links that change the URL actually trigger an action through the dispatcher requesting that the route be updated. A RouteStore responded to this dispatch by setting the URL in the browser and setting some internal data (via route-recognizer) so that the views could query the new routing data upon the change event being fired from the store.
+		- Way1: Let's say I have a component that creates a new post. I hit the create button and a component responds by firing off an action. I use Router.transitionTo in either the action or store layers when the action was successful.
+		- Way2: Make the routing layer just another store. This means that all links that change the URL actually trigger an action through the dispatcher requesting that the route be updated. A RouteStore responded to this dispatch by setting the URL in the browser and setting some internal data (via route-recognizer) so that the views could query the new routing data upon the change event being fired from the store.
 
-	```js
-	var ApplicationView = React.createClass({
-		mixins: [RoutingMixin],
+		```js
+		var ApplicationView = React.createClass({
+			mixins: [RoutingMixin],
 
-		handleRouteChange: function(newUrl, fromHistory) {
-			this.dispatcher.dispatch(RouteActions.changeUrl(newUrl, fromHistory));
-		},
-	});
-	RouteStore.prototype.handleChangeUrl = function(href, skipHistory) {
-		var route = results[0].handler(href, results[0].params);
-		this.currentRoute = route;
-		history.pushState(href, '', href);
-		this.emit("change");
-	}
-	```
-	- You should be doing it with way2 because component should know how to render themselves when the user actually lands on the new url.
+			handleRouteChange: function(newUrl, fromHistory) {
+				this.dispatcher.dispatch(RouteActions.changeUrl(newUrl, fromHistory));
+			},
+		});
+		RouteStore.prototype.handleChangeUrl = function(href, skipHistory) {
+			var route = results[0].handler(href, results[0].params);
+			this.currentRoute = route;
+			history.pushState(href, '', href);
+			this.emit("change");
+		}
+		```
+		- You should be doing it with way2 because component should know how to render themselves when the user actually lands on the new url.
 
-- How would you manage caching / checking that the data already exists in the store?
+	- React-Router
+		- Nested Routes does correspond to nested URLs. React router gives you complete freedom and control about how your url look like. Just because you nest a Route does not mean you have to append another segment to the URL.
+
+	- React-Router With Flux
+		- <http://jaketrent.com/post/react-router-with-flux/>
+
+			```js
+			Router.run(function (Handler,state) {
+				React.render(<Handler params={state.params} query={state.query} />, document.body);
+				CoreViewActionCreators.changeRoute({Handler:Handler,state:state});
+			});
+			```
+		- <https://github.com/rackt/react-router/blob/master/docs/guides/flux.md>
+
+	- How can I pass data between routes without params using react-router?
+		- http://stackoverflow.com/questions/28080102/react-router-passing-data-through-routes
+		- The problem is that when the person refreshes, or in some other way directly loads the url, it needs to show the correct view. Because URLs are just strings, you need to represent the route as a string.
+		- The job of a router is to take that string (the URL) and map it to the actual code (the handler), and provide any extra data (the params, query, and/or hash).
+		- Your job as a router user is to ensure there's enough information in the URL for the router to pick the right handler, and for the handler to have enough information to do its job.
+
+	- Why the react-router API uses JSX for configuration?
+		- <https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/reactjs/RdpfIgW0aOY/PKYv3eammZYJ>
+		- React-router uses JSX to describe how your routes are laid out because it's great for viewing a nested route hierarchy. But internally we just take those descriptors (called "elements" in React 0.12) and just use their props to create our own route objects that we use from that point forward. The router isn't "implemented" with elements. They're just used for config.
+		- At its core, the router is all about describing a nested view hierarchy. In fact, we used to call it "react-nested-router". Nesting is the key thing that Ember figured out how to do correctly, which we copied when we created react-router.
+		- I haven't actually seen another router that mentions nesting at all. This isn't a dig on other routers. I just haven't seen it. Most "routing" libraries out there do some simple pattern matching on the URL and then render one top-level component. This may work well for a router that lives in a server environment, where a full page is generated on each request. But in a browser environment you need a way to manage the state of your UI without blowing the whole thing away every time the URL changes. That's where the nesting comes in. And that's where JSX really shines for declaring the relationship of your views up front.
+		- As for async transition resolution, just use `transition.wait`.
+
+
+- How would du you manage caching / checking that the data already exists in the store?
 	- Getters should be initiated from stores. So they know about existing data.
 
 
-- Loading/Fetching state
+- Loading/Fetching State
 
-	- Q: Should the loading, saving, error messages related a entity be stored in Stores? Since View is going to get its initial state from Store, the only way to know whether its loading/saving comes from a Store?
+	- The loading and saving state related an entity can be stored in Stores. Since View gets its initial state from Store, the only way to know whether its loading/saving comes from a Store.
 
 - Showing server errors
+	- <https://github.com/facebook/flux/issues/78>
+	- I would render a PopupControllerView at the bottom of the body, in it's own React root, which would be listening to stores. It might have number of child popups, or I might create logic to dynamically create those children.
+	- I might maintain a PopupStore, which would have currentPopupID value, which could be null. Down in my list of popup components, they would all receive currentPopupID as a prop, and if their popupID matched, they would get displayed.
+	- Or I would simply let the values in the other stores drive what popup to render more directly, perhaps with some logic in PopupControllerView determining if a popup should be displayed, or which one.
+	- Basically this is all just Flux + React -- nothing special going on, other than creating a separate root for it, and I'm not even sure that's necessary. The generic Popup React component could be made to simply take props and let the store or controller-view above it determine those props. You could then use that generic component to compose various different popups
 
 - Showing client errors
 
 - Showing confirmation
 
 - Validation
+	- <https://github.com/facebook/flux/issues/2>
+		- I would create a utility library like `FooValidationUtils.js` that could determine whether the input was valid based on data passed into the React component - and I would pass down whatever data was required to judge the validity of the input. This would encapsulate the logic required for validation.
+		- The Utils modules should not have dependencies on Stores, so that they can be used in any context - any part of the system, view or store, can invoke these utility methods. The methods should be stateless and pure, in the functional sense. So then you could do view-level validation and store-level `invariant()` enforcement with the same Utils functions. Unit testing these is easy and straightforward.
+		- Also, if the individual form input components need to be reused, but have different validation logic in different contexts, you will want to pass event handlers to them as `props`, allowing the parent components to define how the validation should be done.
+		- If the amount of data required to determine validity is really quite large and complex, and thus difficult to pass down through the component tree (which I'm having a little trouble imagining), then I might consider storing the validation state in the `FooStore` itself (maintaining a `formErrors` object), or a `FormStore` or an `ErrorStore`.
+		- But this seems like it isn't ideal for most validation. Form inputs are, after all, one of the few places where maintaining state in the React component is a good thing, and it seems appropriate to perform validation on that state before creating a new Action.
+		- Moving validation to the stores makes more sense to me if you want to create a UI where the user is free to put the stored data into an invalid state, and work with the UI in that invalid state for a while. For example, an image picker where the user must pick a minimum of 5 images. But it's okay for them to have 3 images picked while they are browsing images, with the save button grayed out. Then your controller-views would call `FooStore.hasEnoughImages()` in the handler for the Store's change event to get that boolean flag.
+	- <https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/reactjs/OQ9wSws0eyY/qZ0B4Ixd5MoJ>
+		- I keep my form state in the stores and the library I'm using forces async validations. Where to do form validation in React + Flux?
+		- When you had new data to validate you'd just fire off your validations from within the store which sets `store.isValidating = true` and then when finished it emits a change so views know to update.
+		- Your views would then simply have the logic to work around `store.isValidating()` and `store.isValid()` for display validations appropiately.
+		- This approach seems to keep it quite stateful? Only downside at the moment I see is if you had a second store that cared when the first store was validated. But simply listening to change events on the first store might solve this?
+
 
 - Editing form data that can be cancelled:
 	- Q: Should intermediate form values be stored in views' states rather then sent to store?
 	- A: Your input fields should have their own memory. That means that Store state (source of truth) is immutably decoupled from any changes that happen in components. Through actions, those changes are communicated to the Stores. Whether they become the new truth or fail with errors, the Store state will again be immutably copied to the component input state.
+
+- Why Facebook uses constants for action types instead of string:
+	- For minification. Optimisers can substitute a smaller identifier for a constant, but have to leave strings as they are.
+	- Static analysis tools can more easily find usages and catch errors.
+	- They can help serve as documentation. If all the action types that your application generates are defined centrally as constants, it becomes easier to tell at-a-glance what kinds of operations the system as a whole responds to.
+	- <http://stackoverflow.com/questions/27109652/why-do-flux-architecture-examples-use-constants-for-action-types-instead-of-stri/27109765#27109765>
+
+		```js
+		var keyMirror = require('react/lib/keyMirror');
+
+		module.exports = keyMirror({
+		  TODO_CREATE: null,
+		  TODO_COMPLETE: null,
+		  TODO_DESTROY: null,
+		  TODO_DESTROY_COMPLETED: null,
+		  TODO_TOGGLE_COMPLETE_ALL: null,
+		  TODO_UNDO_COMPLETE: null,
+		  TODO_UPDATE_TEXT: null
+		});
+		// keyMirror:
+		// Input:  {key1: val1, key2: val2}
+		// Output: {key1: key1, key2: key2}
+		```
+
+
+- <http://stackoverflow.com/questions/26593732/unit-conversions-permissions-and-other-transforms-in-flux-react>
+	- Where do behaviors like unit conversions (for display & input), permissions checks, and other presentation related transforms like applying user layout settings to a view. (for example, a user can define what data fields to see in a summary view, and in which order to see those) belong in a Flux architecture?
+		- If your transformations are "pure" functions, then they can live in a Utils module.
+		- You could create a mixin for the view layer instead, sure. But I personally prefer static method Utils modules to mixins, because it makes it easier to understand where a method is defined.
+		- As far as whether you should store the transformations, I think you probably should not, but this is probably something that needs to be decided on a case-by-case basis. This feels like tightly coupling your view and data layers, and they should probably operate more independently.
+
+- Should I put logic into ActionCreators?
+	- <https://github.com/facebook/flux/issues/86>
+	- I have a scenario where an action is to be dispatched however I need to perform some logic dependent on the state of certain stores to determine what actions to dispatch. Should I put the logic in the ActionCreator?
+		- You can put logic in an ActionCreator, but often there is a better design.
+		- Is this in response to a user interaction with the UI?
+		- If so, I would try to do as much logic as possible in the stores, perhaps utilizing Dispatcher.waitFor(), and pass those values down as props to the view. In an event handler, the view would only apply the user-driven variables against those precalculated values that were passed down, and then call the appropriate ActionCreator with the parameters it needs.
+		- If this is in response to another action, I would back up and look at how I am handling that action. I would gather all the required information, again possibly with waitFor(), to "apply a route..." in response to that original action.
+
+
+- Is triggering an action in the store bad practice?
+	- <http://stackoverflow.com/questions/28203081/is-triggering-an-action-in-the-store-bad-practice>
+	- In Flux architecture, the views should be the only ones triggering actions.
 
 
 **References**
@@ -221,8 +382,8 @@ public: true
 	- [eggheadio/egghead-react-flux-example](https://github.com/eggheadio/egghead-react-flux-example)
 - [React and Flux Interview](http://ianobermiller.com/blog/2014/09/15/react-and-flux-interview/)
 - [Avoiding Event Chains in Single Page Applications](http://www.code-experience.com/avoiding-event-chains-in-single-page-applications/)
-
 - React Flux Routing
+	- <http://jaketrent.com/post/react-router-with-flux/>
 	- [rackt/react-router](https://github.com/rackt/react-router)
 	- [flux architecture with react-router](https://groups.google.com/forum/#!topic/reactjs/sDEN6oOqksU)
 	- [gaearon/flux-react-router-example](https://github.com/gaearon/flux-react-router-example)
