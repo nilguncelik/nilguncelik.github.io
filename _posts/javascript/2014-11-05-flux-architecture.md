@@ -238,6 +238,7 @@ module.exports = new FooStore();
 	- Shared state should always be in the stores and pass through the component hierarchy as `props`.
 	- [Unclear on Flux best practices. Thoughts?](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/reactjs/8uu8_UZjJWs/eiqTFZQ4wZ0J)
 	- [ViewController state effectively a mirror of store contents](https://github.com/facebook/flux/issues/55#event-176149848)
+	- TR - <https://www.youtube.com/watch?v=KYzlpRvWZ6c#t=1056>
 
 
 - Routing

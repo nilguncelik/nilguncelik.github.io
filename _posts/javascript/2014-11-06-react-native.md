@@ -13,5 +13,14 @@ public: true
 - This way all of your application logic including rendering is always rendering in a background thread. All the js runs off the main thread by default.
 - The goal is not to have single code base to power all platforms. Not "Write once run anywhere". When you are writing about an Android application you should be thinking about Android pricinples, Android look and feel not IOS principles.
 - Our goal is "Learn once, write anywhere". We want to develop consistent set of tools and technologies that let us built applications using same set of principles across platforms.
+- Native vs MobileWeb
+	- Touch handling is better.
+	- Native Components is better.
+	- Style and Layout is better.
+- React Native is not transpiling js to Objective C. It runs a real JS Engine. It runs jscore which is js engine in IOS.
+- Bridge between JS and Obj-C is
+	- asynchronous
+	- batched
+	- serializable
 
 **References**
