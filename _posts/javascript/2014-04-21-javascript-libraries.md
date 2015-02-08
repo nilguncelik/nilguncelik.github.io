@@ -1,5 +1,5 @@
 ---
-title: Javascript Plugins
+title: Javascript Libraries
 author: NC
 category: javascript
 public: true
@@ -28,6 +28,28 @@ public: true
 
 - [Chartist.JS](http://gionkunz.github.io/chartist-js/index.html)
 
+
+### ORM
+
+- [Waterline](https://github.com/balderdashy/waterline)
+- [Mongoose Object Document Mapper - Node.js](http://mongoosejs.com/)
+
+
+### Hardware and Robotics
+
+- [Johnny-Five](https://github.com/rwaldron/johnny-five)
+- [CylonJS](http://cylonjs.com/)
+
+
+### Isomorphic JS
+
+- [Rendr by Airbnb](https://github.com/rendrjs/rendr)
+
+
+### I18n
+
+- [Polyglot by Airbnb](http://airbnb.github.io/polyglot.js/)
+- [FormatJS by Yahoo](http://formatjs.io/)
 
 
 **References**
