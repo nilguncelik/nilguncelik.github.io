@@ -48,3 +48,6 @@ vmax  // 1 vw or 1vh whichever is largest
 **References**
 
 - [CSS Mastery: Advanced Web Standards Solutions](http://www.amazon.com/CSS-Mastery-Advanced-Standards-Solutions/dp/1430223979)
+- [Lynda](http://www.lynda.com)
+- [Treehouse](http://www.treehouse.com)
+- [CSS Best Practices | Treehouse Workshop](https://www.youtube.com/watch?v=vQVvbwzM9YU )

@@ -109,3 +109,5 @@ media_feature: width | min-width | max-width | height | min-height | max-height 
 **References**
 
 - [Udacity - Mobile Web Development](https://www.udacity.com/course/cs256)
+- [CSS Mastery: Advanced Web Standards Solutions](http://www.amazon.com/CSS-Mastery-Advanced-Standards-Solutions/dp/1430223979)
+- [Lynda](http://www.lynda.com)
