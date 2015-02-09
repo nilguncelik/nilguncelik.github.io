@@ -5,12 +5,12 @@ category: internet-topics
 public: true
 ---
 
-
 - The browser decides if it is a URL or a search term.
 - The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list.
 	- If the URL is in the list it will make a request with https protocol.
 - The browser converts non-ASCII Unicode characters in hostname using Punycode encoding. It represents Unicode with subset of ASCII characters which is supported by Domain Name System (DNS).
-- DNS look up.
+
+### DNS look up and caches
 	- The browser checks its cache.
 	- The browser asks to OS. Operating systems keep the records in its cache or in `hosts` file.
 	- If OS does not have it then a request is made to the known DNS server. This is typically the local router or the ISP's caching DNS server.
@@ -22,7 +22,9 @@ public: true
 	- Now that we have the IP address of either our DNS server or the default gateway we can resume our DNS process:
 	- Port 53 is opened to send a UDP request to DNS server (if the response size is too large, TCP will be used instead).
 	- If the local/ISP DNS server does not have it, then a recursive search is requested and that flows up the list of DNS servers until the SOA is reached, and if found an answer is returned.
-- Opening of a socket
+
+### Socket Connection
+
 	- The browser receives the IP address of the destination server it takes that and the given port number from the URL ( 80 or 443 by default) requests a TCP socket stream from OS.
 	- This request is passed through Transport, Network and Link Layers and becomes ready to be transmitted through your internet connection.
 	- The packet will pass from your computer, possibly through a local network, and then through a modem which converts digital signals into analog signals suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.
@@ -31,7 +33,8 @@ public: true
 	- The server and client will then send and receive multiple messages following the TCP connection flow (ISN, SEQ, FIN packages).
 - TLS Handshake
 	- If the connection requires TLS, the server and client will make TLS handshake and from now on, the TLS session communicates information encrypted with the agreed key.
-- HTTP Protocol
+
+### HTTP Request
 	- If the browser is Chrome, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.
 	- If it is not Chrome, it will send a request of the form:
 
@@ -76,10 +79,13 @@ public: true
 		- The server will use PHP to interpret the index file, and catch the output.
 		- The server will return the output, on the same request to the client.
 
+### The Browser
 
 - The browser then parse DOM and CSSOM from the html and build render tree, calculate layout and paint pixels on the screen.
+- Minimize eliminate render blocking resources (css, font, unknown size images, js).
 
 
 **References**
 
 - <https://github.com/alex/what-happens-when>
+- TR - <http://www.moserware.com/2009/06/first-few-milliseconds-of-https.html>
