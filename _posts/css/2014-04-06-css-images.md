@@ -237,3 +237,4 @@ background-position:  0% 50p%;    // == left center
 - [Lynda](http://www.lynda.com)
 - [Treehouse](http://www.treehouse.com)
 - [CSS Best Practices | Treehouse Workshop](https://www.youtube.com/watch?v=vQVvbwzM9YU )
+- TR - [lazysizes](https://github.com/aFarkas/lazysizes)

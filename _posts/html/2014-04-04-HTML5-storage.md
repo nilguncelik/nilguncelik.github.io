@@ -20,3 +20,4 @@ public: true
 
 - TR - <http://www.html5rocks.com/en/features/storage>
 - TR - <http://www.html5rocks.com/en/tutorials/webdatabase/websql-indexeddb/>
+- TR - <http://codular.com/localstorage>

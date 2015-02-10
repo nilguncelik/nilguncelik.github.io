@@ -12,6 +12,11 @@ public: true
 - [Selectize](https://github.com/brianreavis/selectize.js)
 
 
+### Visualisation
+
+- [D3.js](http://d3js.org/)
+	- Uses HTML, CSS and SVG.
+	- http://corner.squareup.com/2014/10/intro-to-d3.html
 
 ### Graph Plugins
 
@@ -50,6 +55,10 @@ public: true
 
 - [Polyglot by Airbnb](http://airbnb.github.io/polyglot.js/)
 - [FormatJS by Yahoo](http://formatjs.io/)
+
+### Math
+
+- [An extensive math library for JavaScript and Node.js](http://mathjs.org/)
 
 
 **References**

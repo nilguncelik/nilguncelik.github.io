@@ -323,17 +323,21 @@ instead:
 
 ### Page Reset:
 
-+ Don’t use universal selector *.
++ Don’t use universal selector `*`.
 + no control over which elements are reset.
 + Inheritance is lost in css values ? Then we have to write a lot of extra css to define a property for both the parent and the child.
 + Slows down page load time - browser has to run through every element to apply the properties.
 
 + Eric Meyer Reset css 2.0
-     + We don’t need the entire reset. - just the attributes we are using.
+	+ We don’t need the entire reset. - just the attributes we are using.
 + Normalize.css
-     + preserves useful default styles - we do not need to redeclare styles for common elements.
+	+ preserves useful default styles - we do not need to redeclare styles for common elements.
 
+### CSS Coverage Report
 
+- Helps identify unused CSS styles that can be safely removed.
+	- Use Chrome or Firefox Dev Tools.
+	- Firefox Dev Tools allows you to browse multiple pages and then spot unused css rules.
 
 
 **References**
@@ -342,3 +346,7 @@ instead:
 - [Lynda](http://www.lynda.com)
 - [Treehouse](http://www.treehouse.com)
 - [CSS Best Practices | Treehouse Workshop](https://www.youtube.com/watch?v=vQVvbwzM9YU )
+- TR - [writing style sheets for rapidly changing, long-lived projects](http://benfrain.com/enduring-css-writing-style-sheets-rapidly-changing-long-lived-projects/)
+- TR - [High-level advice and guidelines for writing sane, manageable, scalable CSS](http://cssguidelin.es/)
+- TR - [Slaying the Dragon: Refactoring CSS for Maintainability](http://vimeo.com/100501790)
+- TR - [Effortless Style](http://vimeo.com/101718785)

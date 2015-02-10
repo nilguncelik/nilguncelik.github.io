@@ -103,6 +103,12 @@ public: true
 	</script>
 	```
 
+
+- [Critical](https://github.com/addyosmani/critical)
+	- Critical extracts & inlines critical-path (above-the-fold) CSS from HTML.
+	- <https://github.com/addyosmani/critical-path-css-demo>
+
+
 #### Optimizing CSSOM:
 - Split CSS into multiple files and specify media query on `media` attribute of the `link` tag. If the media query is not valid the browser will not block rendering for the CSS file.
 - Use inline CSS.
@@ -148,12 +154,16 @@ public: true
 - Use inline Javascript:
 	- not recommended because js code cannot be re-used across pages.
 	- Be aware that the script execution blocks on CSS fetch and CSSOM construction.
+- Put script tag or inline js before the closing tag of body so that **the parser can render the existing markup when the CSS file is received**.
 - Use async attribute on script tag:
 	- JS won't block DOM construction.
 	- TR - <https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript#parser-blocking-vs-asynchronous-javascript>
+	- This is slightly more performant than putting script tag at the bottom.
+	- Because the browser doesn't need to wait on the DOM and CSS to be loaded before it can execute JS.
+	- Be careful that you cant rely on the DOM, CSS or any other JS file to be loaded by the time your JS actually executes.
+
 - Defer javascript execution by loading script after the browser fires the `onload` event.
 	- <https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers.onload>
-- Put script tag or inline js before the closing tag of body so that the parser can render the existing markup when the CSS file is received.
 
 ![](/img/js_execution.jpg)
 
@@ -213,3 +223,6 @@ public: true
 - TR - <https://developers.google.com/web/starter-kit/>
 - TR - <http://www.stubbornella.org/content/2009/03/27/reflows-repaints-css-performance-making-your-javascript-slow/>
 - TR - <https://engineering.gosquared.com/optimising-60fps-everywhere-in-javascript>
+- TR - [where your application is spending its time?](https://github.com/addyosmani/timing.js)
+- TR - [Recommended by Addy Osmani as a **Must Read** - Improving Smashing Magazine’s Performance: A Case Study](http://www.smashingmagazine.com/2014/09/08/improving-smashing-magazine-performance-case-study/)
+- TR - [Paul Irish: Delivering The Goods In Under 1000ms](https://www.youtube.com/watch?v=E5lZ12Z889k) [Slides](https://docs.google.com/presentation/d/1xx5FKTt-UgVxK0iri2WngKUdWrOn-LF4XYYHOSQcnT0/preview?slide=id.p19)
