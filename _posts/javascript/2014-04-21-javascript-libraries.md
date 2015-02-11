@@ -56,6 +56,10 @@ public: true
 - [Polyglot by Airbnb](http://airbnb.github.io/polyglot.js/)
 - [FormatJS by Yahoo](http://formatjs.io/)
 
+### Number formatting and manipulation
+
+- [Numeral.js](http://numeraljs.com/)
+
 ### Math
 
 - [An extensive math library for JavaScript and Node.js](http://mathjs.org/)

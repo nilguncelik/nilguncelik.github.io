@@ -238,3 +238,4 @@ background-position:  0% 50p%;    // == left center
 - [Treehouse](http://www.treehouse.com)
 - [CSS Best Practices | Treehouse Workshop](https://www.youtube.com/watch?v=vQVvbwzM9YU )
 - TR - [lazysizes](https://github.com/aFarkas/lazysizes)
+- TR - <http://alistapart.com/blog/post/why-responsive-images-matter/>
