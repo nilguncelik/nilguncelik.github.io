@@ -192,11 +192,12 @@ Object.prototype.isPrototypeOf(o)   // => true: p inherits from Object.prototype
 
 - A class is a set of objects that inherit properties from the same prototype object.
 - If we define a prototype object, and then use ```inherit()``` to create objects that inherit from it, we have defined a JavaScript class.
-- Factory Function vs Constructor Function
+
+#### Factory Function vs Constructor Function
 	- **Factory function** creates the object (using inherit function) in the body and returns it.
 	- **Constructor function** does not create any object. It is created by the new operator and passed as ```this``` value to the constructor. The new object is automatically returned.
 
-```
+```js
 // Factory function
 function range(from, to) {
   var r = inherit(range.methods);
@@ -242,9 +243,107 @@ console.log(r);             // Prints (1...3)
 	- ```r instanceof Range```
 	- The ```instanceof``` operator does not actually check whether ```r``` was initialized by the ```Range``` constructor. It checks whether it inherits from ```Range.prototype```.
 - Any Javascript function can be used as a constructor, and constructor invocations need a prototype property. Therefore, every Javascript function automatically has a prototype property. The value of ```this``` property is an object that has a single non-enumerable constructor property.
-- The value of the constructor property is the function object
-	- for any function ```F```
-		- ```F.prototype.constructor==F```
+
+- Every object has a build-in property named constructor.
+
+```js
+function Rabbit() { /* ..code.. */ }
+// Rabbit.prototype = { constructor: Rabbit }   ---> automatic
+```
+- When you declare a function `function Rabbit() { }`:
+	- The interpreter creates a new function object from your declaration.
+	- Together with the function, it’s `prototype` property is created and populated.
+	- This default `prototype` property is an object with property `constructor`, which is set to the function itself.
+	- i.e. `Rabbit.prototype = { constructor: Rabbit }`.
+
+```js
+var rabbit = new Rabbit()
+// rabbit.__proto__ == { constructor: Rabbit }  ---> automatic
+// rabbit.constructor == Rabbit                 ---> automatic
+// rabbit.constructor actually calls rabbit.__proto__.constructor
+```
+- When you call `new Rabbit()`:
+	- The interpreter creates a new object.
+	- The interpreter sets the `constructor` property of the object to Rabbit.
+	- The interpreter sets up the object to delegate to Rabbit.prototype.
+	- The interpreter calls Rabbit() in the context of the new object.
+	- <http://pivotallabs.com/javascript-constructors-prototypes-and-the-new-keyword/>
+
+
+- If you override prototype of Rabbit, rabbit will loose its constructor property:
+
+```js
+function Rabbit() { }
+Rabbit.prototype = {}    // this results in rabbit loosing its constructor. dont do it.
+var rabbit = new Rabbit()
+// rabbit.__proto__ == {  }  ---> automatic
+```
+- <http://javascript.info/tutorial/constructor>
+
+
+
+
+####  Inheritance
+
+- a base class Animal:
+
+```js
+function Animal(name) {
+	// each instance have this property initialized.
+	this.name = name;
+}
+
+// Prototype properties are shared across all instances of the class.
+// However, they can still be overwritten on a per-instance basis with the `this` keyword.
+Animal.prototype.speak = function() {
+	console.log("My name is " + this.name);
+};
+
+var animal = new Animal('Monty');
+animal.speak(); // My name is Monty
+
+new Animal('Monty')
+Animal
+	name: "Monty"
+	__proto__: Animal
+		constructor: function Animal(name){
+		speak: function (){
+		__proto__: Object
+
+```
+
+- inheriting from Animal class:
+
+```js
+function Cat(name) {
+	Animal.call(this, name);      // inherit Animals constructor. similar to super in Java.
+	                              // Note that context is passed to Animal constructor.
+}
+
+Cat.prototype = new Animal();   // cat inherits all of Animals properties.
+
+var cat = new Cat('Monty');
+cat.speak(); 										// My name is Monty
+
+new Cat('Monty')
+Cat
+	name: "Monty"
+	__proto__: Animal
+		name: undefined
+		__proto__: Animal
+			constructor: function Animal(name){
+			speak: function (){
+			__proto__: Object
+```
+- Defining subclass
+	- ```constructor.prototype = inherit(superclass.prototype);
+		constructor.prototype.constructor = constructor;```
+- Javascript’s prototype-based inheritance mechanism is dynamic:  
+	- **an  object  inherits properties from its prototype, even if the prototype changes after the object is created**.
+
+
+#### Java-like Classes
+
 - We can create a Java-style class using 3 step algorithm:
 	- write a constructor function that sets instance properties on new objects.
 	- define instance methods on the prototype object of the constructor.
@@ -291,11 +390,11 @@ var myClass2 = new MyClass2();
 
 - Private properties can be created using closures.
 	- **But a class that uses a closure to encapsulate its state is slower and larger than the equivalent class with unencapsulated state variables**.
-- Defining subclass
-	- ```constructor.prototype = inherit(superclass.prototype);
-		constructor.prototype.constructor = constructor;```
-- Javascript’s prototype-based inheritance mechanism is dynamic:  
-	- **an  object  inherits properties from its prototype, even if the prototype changes after the object is created**.
+
+
+
+
+
 
 #### Determining Classes and Types
 
@@ -383,6 +482,9 @@ function quacks(o /*, ... */) {
 
 
 
+
+
+
 #### Objects As Associative Arrays
 - ```object["property"]``` syntax, looks like array access where the array is indexed by strings rather than by numbers.
 - This kind of array is known as an associative array (or hash or map or dictionary). Therefore Javascript objects are associative arrays.
@@ -400,4 +502,6 @@ for(i = 0; i < 4; i++) {
 
 **References**
 
-[JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
+- [JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
+- <http://davidwalsh.name/javascript-objects-deconstruction>
+- <http://wildlyinaccurate.com/understanding-javascript-inheritance-and-the-prototype-chain/>
