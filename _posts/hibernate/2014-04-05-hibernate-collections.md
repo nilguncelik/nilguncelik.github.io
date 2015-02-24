@@ -223,17 +223,24 @@ sess.flush();
 
 ### `@MappedBy`
 
-+ Mapping is done without separate table
++ Mapping is done without a separate table
 
 ```java
-//parent entity
-@OneToMany(mappedBy=“Entity”)
-Collection<Entity> propertyName;
-//child entity
-@ManyToOne @JoinColumn(name=“parent_entity_id”)
-Entity2 propertyName;
+//one side of one-to-many (Parent)
+@OneToMany(mappedBy="parentEntity")
+Collection<ChildEntity> children;
+//many side of one-to-many (Children)
+@ManyToOne
+ParentEntity parentEntity;
 ```
-+ This creates a join column inside the child object table instead of creating a join table.
++ Without `mappedBy`
+  + To access parent from child, Hibernate uses a join column (foreign key to parent) in the child table.
+  + To access children of a parent, Hibernate uses a join table.
++ With `mappedBy`
+  + To access parent from child, Hibernate uses a join column (foreign key to parent) in the child table.
+  + To access children of a parent, Hibernate uses the join column (foreign key to parent) in the child table.
+
+
 
 ## `@ManyToMany` Relation
 

@@ -194,8 +194,9 @@ Object.prototype.isPrototypeOf(o)   // => true: p inherits from Object.prototype
 - If we define a prototype object, and then use ```inherit()``` to create objects that inherit from it, we have defined a JavaScript class.
 
 #### Factory Function vs Constructor Function
-	- **Factory function** creates the object (using inherit function) in the body and returns it.
-	- **Constructor function** does not create any object. It is created by the new operator and passed as ```this``` value to the constructor. The new object is automatically returned.
+
+- **Factory function** creates the object (using inherit function) in the body and returns it.
+- **Constructor function** does not create any object. It is created by the new operator and passed as ```this``` value to the constructor. The new object is automatically returned.
 
 ```js
 // Factory function
