@@ -5,45 +5,41 @@ category: css
 public: true
 ---
 
+### Things to consider
 
-### Naming Conventions
+- Semantics (readibility)
+- Modularity (reusability, flexibility)
+- Efficiency ( performance )
+	- Performance of css selectors are not much of a problem.
+	- But css has a huge impact on file size and HTTP requests. You should be worried about that side of performance effect of CSS instead of selector performance ( Nicole Sullivan ).
 
-+ Name your elements based on what they are rather than how they look.
-	+ eg. use .warning or .notification instead of .red
-  + Your code will have more meaning and never go out of sync with your designs.
-+ Do not name your elements based on content.
+### Naming
 
-```html
-div class="news"
-     h2 News h2
-     [news content]
-div
-```
-+ The class name *news* doesn’t tell you anything that is not already obvious from the content.
-+ It gives you no information about the architectural structure of the component, and it cannot be used with content that isn't *news*.
-+ Name your elements using repeating structural and functional patterns in a design.
-+ [About HTML semantics and front end architecture - Nicolas Gallagher](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/)
-+ [Naming conventions - Necolas Gallagher](https://gist.github.com/necolas/1309546)
-+ [BEM style naming](http://bem.info/)
+#### Name your elements based on what they are rather than how they look.
+	- eg. use .warning or .notification instead of .red
+  - Your code will have more meaning and never go out of sync with your designs.
 
 
-+ If you find yourself adding lots of extraneous classes to your document, it is probably a warning sign that your document is *not well structured*.
-+ Instead, think about how these elements differ from each other. Often, you will find that the only difference is where they appear on the page.
-+ Rather than give these elements different classes, think about applying a class or an ID to one of their ancestors, and then targeting them using a descendant selector.
-+ Removing extraneous classes will help simplify your code and reduce page weight. Over-reliance on class names is almost never necessary.
+#### Do not name your elements based on content.
+
+	```html
+	div class="news"
+	     h2 News h2
+	     [news content]
+	div
+	```
+
+	- The class name *news* doesn’t tell you anything that is not already obvious from the content.
+	- It gives you no information about the architectural structure of the component, and it cannot be used with content that isn't *news*.
+
+#### Name your elements using repeating **structural and functional patterns** in a design.
+
+- [About HTML semantics and front end architecture - Nicolas Gallagher](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/)
+- [Naming conventions - Necolas Gallagher](https://gist.github.com/necolas/1309546)
+- [BEM style naming](http://bem.info/)
 
 
-### Divs and spans
-
-+ Divitus: Using too many divs
-	+ It is usually a sign that your code is poorly structured and overly complicated.
-  + Divs should be used to group related items based on their meaning or function rather than their presentation or layout.
-  + Use the new HTML5 elements when possible.
-  + Unfortunately sometimes you cannot avoid adding an extra non semantic div or span to get the page to display the way you want.
-
-
-
-### DRY: Don’t repeat yourself
+### Be DRY
 
 - *Each property/value pair should be defined only once.*
 - Group repeated css properties together and then add selectors to these groups.
@@ -84,6 +80,59 @@ can be re-written as:
 }
 ```
 
+### Do not rely on parent selectors - use namespaces instead
+
++ They lower the specificity of child elements.
++ Use namespaces instead as a modifier to extend or change a class selector.
++ Namespaces in classes keep components self-contained and modular. They can be used anywhere.
++ Namespaces are easier to reuse, and harder to create hacky combinations and overrides.
++ This namespace approach is very similar to subclass approach of smacss.
+
+
+```css
+.sidebar{
+}
+.sidebar .title{
+}
+```
+
+instead:
+
+```css
+.sidebar{
+}
+.sidebar-title{
+}
+```
+
+
+```css
+.sidebar{
+}
+#main-footer .title{
+}
+```
+
+instead:
+
+```css
+.sidebar{
+}
+.main-footer-title{
+}
+```
+
+### Dont rely on universal selector *
+### Dont rely on tag (element) selectors:
+
++ They are not reusable and performant.
++ can be easily overridden
++ Use classnames instead.
+
+
+### important!
+
+- If you have to use it, document your use of !important.
 
 ### Object Orientated Cascading Style Sheets (OOCSS)
 
@@ -95,7 +144,7 @@ can be re-written as:
 
 #### Reusable and combinable components
 
-+ Scalable HTML/CSS rely on classes to allow for the creation of reusable components. A flexible and reusable component is one which neither relies on existing within a certain part of the DOM tree, nor requires the use of specific element types. It should be able to adapt to different containers and be easily themed.
++ Scalable HTML/CSS rely on classes to allow for the creation of reusable components. *A flexible and reusable component is one which neither relies on existing within a certain part of the DOM tree, nor requires the use of specific element types. It should be able to adapt to different containers and be easily themed*.
 
 + The following example prevents the easy combination of the ```btn``` component with the ```uilist``` component as specificity of ```.btn``` is less than that of ```.uilist a```:
 
@@ -163,12 +212,15 @@ and add global-width class to the elements with  .header-inner, .main-content, .
 + Creating new pages will require very little to no css coding.
 
 
+- `button strong span .callout` can be written as  `button .callout` -- this way you can move `.callout` around more easily in the future and it's not tightly coupled with the DOM tree.
+
+- `div.content` can be written as `.content`.
 
 ### Scalable and Modular Architecture For CSS (SMACSS)
 
 + [SMACSS](http://www.smacss.com)
 + Similar to OOCSS, combines repeating CSS patterns into reusable components.
-+ Components are sepeated into 5 categories:
++ Components are separated into 5 categories:
 
 
 1. **Base Rules**
@@ -193,7 +245,7 @@ and add global-width class to the elements with  .header-inner, .main-content, .
 }
 ```
 
-Assume search-box component needs to be modified to use in the footer or sidebar sections. Instead of creating descendant selectors, create subclasses that contain modified styles.
+- Assume search-box component needs to be modified to use in the footer or sidebar sections. Instead of creating descendant selectors, create subclasses that contain modified styles.
 
 ```css
 .search-box{
@@ -219,6 +271,7 @@ Assume search-box component needs to be modified to use in the footer or sidebar
 
 ### IDs vs Classes
 
++ Even though IDs are more efficient than classes, the difference is extremely small, so opt for classes when you can. vid
 + IDs as best to use as JS hooks or as fragment identifiers (for url hash and href attribute) in a page.
 + They are vey heavy in specificity and and cannot be reused.
 + Classes are more flexible for reuse.
@@ -228,55 +281,18 @@ Assume search-box component needs to be modified to use in the footer or sidebar
      + Decouples presentation classes with functional classes.
      + Reduces the chances of affecting JS behaviour when making theme or structural changes in the CSS.
 
-### Do not rely on parent selectors
 
-+ They lower the specificity of child elements.
-+ Use namespaces instead as a modifier to extend or change a class selector.
-+ Namespaces in classes keep components self-contained and modular. They can be used anywhere - not location based.
-+ This namespace approach is very similar to subclass approach of smacss.
+### CSS Selector Performance
 
+- The browser starts by matching the rightmost part of the selector against your element, then chances are it won't match and the browser is done. If it does match, the browser has to do more work, proportional to your tree depth.
+- For example `h1 {}` is faster to evaluate than `div p{}` which has more number of selectors.
+	- `h1`: match any `h1` tag.
+	- `div p`: match any `p` tag, but then walk up the dom tree and only apply this rule if there is a `div` element as its parent.
+- **The more specific a rule is the slower it takes to evaluate**.
 
-```css
-.sidebar{
-}
-.sidebar .title{
-}
-```
+### Document everything
 
-instead:
-
-```css
-.sidebar{
-}
-.sidebar-title{
-}
-```
-
-
-```css
-.sidebar{
-}
-#main-footer .title{
-}
-```
-
-instead:
-
-```css
-.sidebar{
-}
-.main-footer-title{
-}
-```
-
-### Dont rely on tag (element) selectors:
-
-+ They are not reusable
-+ can be easily overridden
-+ more fragile.
-
-
-
+- Whenever you add a new class or group of classes, leave comments to clarify what they're for, examples of where they're being used, etc. You want people to be able to read your CSS and understand your intentions, just as if you were writing in a programming language.
 
 ### Property Ordering
 
@@ -292,6 +308,22 @@ instead:
 + Prefixr: converts your css to cross browser compatible css.
 + Sublime Text and Coda have plugins for it.
 
+
+### Divs and spans
+
++ Divitus: Using too many divs
+	+ It is usually a sign that your code is poorly structured and overly complicated.
+  + Divs should be used to group related items based on their meaning or function rather than their presentation or layout.
+  + Use the new HTML5 elements when possible.
+  + Unfortunately sometimes you cannot avoid adding an extra non semantic div or span to get the page to display the way you want.
+
+
+### Having too many classes
+
+- If you find yourself adding lots of extraneous classes to your document, it is probably a warning sign that your document is *not well structured*.
+- Instead, think about how these elements differ from each other. Often, you will find that the only difference is where they appear on the page.
+- Rather than give these elements different classes, think about applying a class or an ID to one of their ancestors, and then targeting them using a descendant selector.
+- Removing extraneous classes will help simplify your code and reduce page weight. Over-reliance on class names is almost never necessary.
 
 
 ### Falling back
@@ -350,3 +382,4 @@ instead:
 - TR - [High-level advice and guidelines for writing sane, manageable, scalable CSS](http://cssguidelin.es/)
 - TR - [Slaying the Dragon: Refactoring CSS for Maintainability](http://vimeo.com/100501790)
 - TR - [Effortless Style](http://vimeo.com/101718785)
+- <https://github.com/sezgi/CSS-Best-Practices>
