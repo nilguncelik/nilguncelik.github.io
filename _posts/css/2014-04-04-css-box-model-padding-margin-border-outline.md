@@ -24,6 +24,18 @@ public: true
 box-sizing: border-box;         /* Opera/IE 8+ */
 ```
 
+- Paul Irish recommends following code for box-sizing property <http://www.paulirish.com/2012/box-sizing-border-box-ftw/>
+
+```css
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+```
+
 + `$.css("width")` vs `$.outerWidth( [includeMargin ] )`:
      + `$.css("width")`
         + gives content width.
