@@ -13,24 +13,50 @@ public: true
 $ git add README test.rb LICENSE
 ```
 
-- Staging the files checksums each file, stores that version of the file in the Git repository (Git refers to them as blobs), and adds that checksum to the staging area.
+- Staging the files checksums each file, stores that version of the file (called **blobs**) in the Git repository, and adds that blobs to the staging area.
 
 ```sh
 $ git commit -m 'initial commit of my project'
 ```
-- When you create the commit, Git checksums each subdirectory (in this case, just the root project directory) and stores those tree objects in the Git repository. Then creates a commit object that has the metadata and a pointer to the root project tree so it can re-create that snapshot when needed.
+- When you create the commit, Git checksums each subdirectory (in this case, just the root project directory) and stores those **tree objects** in the Git repository. Then creates a commit object that has the metadata and a pointer to the root project tree so it can re-create that snapshot when needed.
 
-- Your Git repository now contains five objects:
-	- one blob for the contents of each of your three files,
-	- one tree object that lists the contents of the directory and specifies which file names are stored as which blobs, and
-	- one commit object with the pointer to that root tree, pointers to the commit or commits that directly came before this commit and all the commit metadata (author’s name and email, the message).
+- Your Git repository now contains 5 objects:
+	- **blob objects** for the contents of each of your three files,
+	- **one tree object** that lists the contents of the directory and specifies which file names are stored as which blobs, and
+	- **one commit object** with the pointer to that root tree, pointers to the commit or commits that directly came before this commit and all the commit metadata (author’s name and email, authoring date commiter, commit date, commit message).
+
+- Git then creates a SHA-1 hash over all these 5 objects:
+
+	```
+	sha1( commit message, commiter, commit date, author, author date, tree, parents)
+	```
+
+	- This lets Git to have integrity because there is no chance that bits gets lost in transit without Git knowing about it.
 
 ![](/img/git_anatomy_of_a_commit.png)
+
+
 
 - If you make some changes and commit again, the next commit stores a pointer to the commit that came immediately before it.
 
 ![](/img/git_commit_parents.png)
 
+
+- Lets look at the tree object closer.
+	- Assume we have a tree structure like this
+	```
+	.
+	├── .git (contents left out)
+	├── assets
+	|   ├── logo.png
+	|   └── app.css
+	└── app.js
+	```
+	- Here is what Git’s representation of the working directory looks like.
+
+	![](/img/git_commit_tree_object.png)
+
+	- The root tree object maps names to hashes and those hashes can refer to blobs (for files) or other tree objects which in turn are dictionaries themselves that map names to hashes which can refer to… and so on.
 
 ### Showing a specific commit:
 
@@ -106,3 +132,4 @@ git diff <sourceBranch> <targetBranch>
 **References**
 
 - [Pro Git - Book](http://git-scm.com/book)
+- [The anatomy of a Git commit](http://blog.thoughtram.io/git/2014/11/18/the-anatomy-of-a-git-commit.html)

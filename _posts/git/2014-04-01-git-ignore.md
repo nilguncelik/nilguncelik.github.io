@@ -27,6 +27,8 @@ doc/**/*.txt  # ignore all .txt files in the doc/ directory
 
 - Setting up a .gitignore file before you get going is generally a good idea so you don’t accidentally commit files that you really don’t want in your Git repository.
 
+- [A collection of useful .gitignore templates](https://github.com/github/gitignore)
+
 
 **References**
 

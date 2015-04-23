@@ -64,7 +64,18 @@ $ vi ~/.gitignore_global
 *~
 .DS_Store
 logs/
+._*
+.AppleDouble
+Thumbs.db
+*.sublime-*
+TODO
+TEMP_*
+.srvr*
+*.sw[op]
 ```
+
+- It is like a global .gitignore file for all your repositories.
+- [A collection of useful .gitignore templates](https://github.com/github/gitignore)
 
 - Project excludes
 
@@ -115,14 +126,18 @@ $ git config --global core.whitespace trailing-space,space-before-tab,indent-wit
 - Git will detect these issues when you run a `git diff` command and try to color them so you can possibly fix them before you commit.
 
 
+
 ### Creating aliases:
 
 ```sh
-git config --global alias.st status
-git st
+$ git config --global alias.st status
+$ git st
 # alias for git status
-git config --global alias.unstage 'reset HEAD --'
-git config --global alias.last 'log -1 HEAD'
+
+$ git config --global alias.unstage 'reset HEAD --'
+$ git config --global alias.last 'log -1 HEAD'
+$ git config --global alias.detailed-log 'log --pretty=format:"%h %ad %s" --date=short --all'
+$ git config --global alias.decorative-log 'log --graph --oneline --decorate --abbrev-commit --all'
 ```
 
 ### Binary Files

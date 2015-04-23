@@ -85,6 +85,8 @@ Changes to be committed:
 
 ```
 
+- You can also use `git checkout -p` to partially select which changes to be reverted.
+
 - You can see that the changes have been reverted. You should also realize that this is a dangerous command: any changes you made to that file are gone — Don’t ever use this command unless you absolutely know that you don’t want the file. If you just need to get it out of the way, you can use stashing and branching; these are generally better ways to go.
 - Anything that is committed in Git can almost always be recovered. Even commits that were on branches that were deleted or commits that were overwritten with an `--amend` commit can be recovered. However, anything you lose that was never committed is likely never to be seen again.
 

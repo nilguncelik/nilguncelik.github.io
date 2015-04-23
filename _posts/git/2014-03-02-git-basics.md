@@ -259,6 +259,7 @@ What now>
 	- add untracked files (4)
 	- see diffs of what has been staged (6)
 
+- You can also use `git add --p(atch)` to stage parts of files.
 
 
 ### Removing Files
@@ -316,6 +317,7 @@ $ git diff (HEAD)
 # i.e. unstaged differences between working copy and last commit.
 
 $ git diff --staged
+$ git diff --cached
 # What have you staged that you are about to commit?
 
 $ git diff HEAD^

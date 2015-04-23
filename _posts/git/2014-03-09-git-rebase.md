@@ -46,10 +46,25 @@ $ git merge experiment
 
 ### Merge vs Rebase
 
-- Rebasing replays changes from one line of work onto another in the order they were introduced, whereas merging takes the endpoints and merges them together.
-- In general the way to get the best of both worlds is to rebase local changes you’ve made but haven’t shared yet before you push them in order to clean up your story, but never rebase anything you’ve pushed somewhere.
-- The general rule of thumb with rebasing is :
-	- Do not rebase commits that exist outside your repository.
+![](/img/git_history_merge_vs_rebase.png)
+
+- Merge
+	- It takes the endpoints and merges them together.
+	- It is simple to use and understand.
+	- The commits on the source branch remain separate from other branch commits, provided you don’t perform a fast-forward merge. (this separation can be useful in the case of feature branches, where you might want to take a feature and merge it into another branch later)
+	- Existing commits on the source branch are unchanged and remain valid; it doesn’t matter if they’ve been shared with others.
+	- If the need to merge arises simply because multiple people are working on the same branch in parallel, the merges don’t serve any useful historic purpose and create clutter.
+
+- Rebase
+	- It replays changes from one line of work onto another in the order they were introduced.
+	- It simplifies your history.
+	- It is the most intuitive and clutter-free way to combine commits from multiple developers in a shared branch.
+	- Slightly more complex, especially under conflict conditions. (each commit is rebased in order, and a conflict will interrupt the process of rebasing multiple commits.)
+	- Rewriting of history has ramifications if you’ve previously pushed those commits elsewhere. (you may push commits you may want to rebase later (as a backup) but only if it’s to a remote branch that only you use. If anyone else checks out that branch and you later rebase it, it’s going to get very confusing.)
+
+- Golden rule of rebasing:
+	- Never rebase a branch that you have pushed, or that you have pulled from another person.
+
 	- If you push commits somewhere and others pull them down and base work on them, and then you rewrite those commits with git rebase and push them up again, your collaborators will have to re-merge their work and things will get messy when you try to pull their work back into yours.
 
 	![](/img/git_rebase_remote_1.png)
@@ -61,6 +76,9 @@ $ git merge experiment
 	![](/img/git_rebase_remote_4.png)
 
 	- If you run a `git log`, you’ll see two commits that have the same author, date, and message, which will be confusing. Furthermore, if you push this history back up to the server, you’ll reintroduce all those rebased commits to the central server, which can further confuse people. It’s pretty safe to assume that the other developer doesn’t want C4 and C6 to be in the history; that’s why she rebased in the first place.
+
+
+- In general, to bring a feature branch up to date with its base branch, prefer rebasing your feature branch onto the latest base branch if you haven’t pushed this branch anywhere yet, or you know for sure that other people will not have checked out your feature branch. Otherwise, merge the latest base changes into your feature branch.
 
 
 ### Conflict handling
@@ -122,3 +140,4 @@ pick a5f4a0d added cat-file
 **References**
 - [Pro Git - Book](http://git-scm.com/book)
 - <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
+- [Git Branching Model](http://www.slideshare.net/lemiorhan/git-branching-model)

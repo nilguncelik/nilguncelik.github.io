@@ -119,22 +119,6 @@ git branch -d <branch-name>
 	- You can't delete these branches with `-d` option, you have to force deletion using `-D`.
 
 
-## Branching workflows
-
-### Long running branches
-
-
-- Many Git developers have a workflow that embraces this approach, such as having only code that is entirely stable in their master branch – possibly only code that has been or will be released. They have another parallel branch named develop or next that they work from or use to test stability – it isn’t necessarily always stable, but whenever it gets to a stable state, it can be merged into master. It’s used to pull in topic branches (short-lived branches) when they’re ready, to make sure they pass all the tests and don’t introduce bugs.
-- The idea is that your branches are at various levels of stability; when they reach a more stable level, they're merged into the branch above them.
-- Having multiple long-running branches isn’t necessary, but it’s often helpful, especially when you’re dealing with very large or complex projects.
-
-
-### Topic branches
-
-- A topic branch is a short-lived branch that you create and use for a single particular feature.
-- This technique allows you to context-switch quickly and completely – because your work is separated into silos where all the changes in that branch have to do with that topic, it’s easier to see what has happened during code review and such. You can keep the changes there for minutes, days, or months, and merge them in when they’re ready, regardless of the order in which they were created or worked on.
-
-
 
 ## Remote Branches
 
@@ -233,3 +217,4 @@ git remote prune origin
 
 **References**
 - [Pro Git - Book](http://git-scm.com/book)
+- [Understanding branches in Git](http://blog.thoughtram.io/git/rebase-book/2015/02/10/understanding-branches-in-git.html)
