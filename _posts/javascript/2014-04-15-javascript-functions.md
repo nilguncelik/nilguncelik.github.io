@@ -7,24 +7,24 @@ public: true
 
 
 #### Function Definition Expression
-```javascript
+```js
 function(x) { return x+1; }
 ```
 
 - Creates a new function object.
 - Does not declare any variable, creates only the function object.
 - Uses:
-	- Assignment: ```var x = function(x) { return x+1; }```
+	- Assignment: `var x = function(x) { return x+1; }`
 		- Only the variable declaration is hoisted. But assignments to those variables are not hoisted. The variable initialization code remains where you placed it.
-		- Value of ```x``` is ```undefined``` until its declaration.
-	- Invocation: ```func(function(x) { return x+1; });```
-- If a function definition expression includes a name, the local function scope for that function will include a binding of that name to the function object.  ```var f = function fact(x) { if (x <= 1) return 1; else return x*fact(x-1); };```
+		- Value of `x` is `undefined` until its declaration.
+	- Invocation: `func(function(x) { return x+1; });`
+- If a function definition expression includes a name, the local function scope for that function will include a binding of that name to the function object.  `var f = function fact(x) { if (x <= 1) return 1; else return x*fact(x-1); };`
 	- In effect, the function name becomes a local variable within the function.
 	- Useful for recursion.
 
 
 #### Function Declaration Statement
-```javascript
+```js
 function f(x) { return x+1; }
 ```
 
@@ -40,7 +40,7 @@ function f(x) { return x+1; }
 
 - Javascript functions can be invoked in four ways which can differ in their handling of arguments, invocation context, and return value.
 	- as functions
-		- Invocation context is either the global object (ES3 and non-strict ES5) or ```undefined``` (strict mode);
+		- Invocation context is either the global object (ES3 and non-strict ES5) or `undefined` (strict mode);
 	- as methods
 		- if the function is the property of an object or an element of an array -then it is a method invocation.
 		- Invocation context is the object on which the method is invoked.
@@ -63,18 +63,18 @@ function f(x) { return x+1; }
 
 #### The Arguments object
 
-- Within the body of a function, the identifier ```arguments``` refers to the Arguments object for that invocation.
+- Within the body of a function, the identifier `arguments` refers to the Arguments object for that invocation.
 - It can be used to write functions that can operate on any number of arguments or to directly refer to unnamed argument values.
-- ```f(a,b,c)```
-	- In non-strict mode, ```arguments[0]``` and ```a``` are like two different names for the same variable.
-	- In strict mode, ```arguments[0]``` and ```a``` could refer initially to the same value, but a change to one would have no effect on the other.
-- In non-strict mode, ```arguments``` is just an identifier.
-	- In strict mode, it is a reserved word. Functions cannot use arguments as a parameter name or as a local variable name. They cannot assign values to ```arguments```.
-- It is an array-like object. You can use ```Array.prototype.slice.call``` to convert arguments object into an true Array:
-	- ```Array.prototype.slice.call(arguments)```
-- The Arguments object also defines 2 properties : ```callee``` and ```caller```
-- ```callee``` property refers to the currently running function. It allows unnamed functions to call themselves recursively.
-- ```caller``` is a nonstandard property that refers to the function that called this one. It gives access to the call stack.
+- `f(a,b,c)`
+	- In non-strict mode, `arguments[0]` and `a` are like two different names for the same variable.
+	- In strict mode, `arguments[0]` and `a` could refer initially to the same value, but a change to one would have no effect on the other.
+- In non-strict mode, `arguments` is just an identifier.
+	- In strict mode, it is a reserved word. Functions cannot use arguments as a parameter name or as a local variable name. They cannot assign values to `arguments`.
+- It is an array-like object. You can use `Array.prototype.slice.call` to convert arguments object into an true Array:
+	- `Array.prototype.slice.call(arguments)`
+- The Arguments object also defines 2 properties : `callee` and `caller`
+- `callee` property refers to the currently running function. It allows unnamed functions to call themselves recursively.
+- `caller` is a nonstandard property that refers to the function that called this one. It gives access to the call stack.
 - In ES5 strict mode, these properties raise a **TypeError** if you try to read or write them.
 
 #### Defining function properties
@@ -82,13 +82,13 @@ function f(x) { return x+1; }
 - When a function needs a *static variable* whose value persists across invocations, it is often convenient to use a property of the function, instead of cluttering up the namespace by defining a global variable.
 - Suppose you want to write a function that returns a unique integer whenever it is invoked. The function must never return the same value twice:
 
-```javascript
+```js
 uniqueInteger.counter = 0;
 function uniqueInteger() {
     return uniqueInteger.counter++;
 }
 ```
-- Note that this implementation creates a public property on the ```uniqueInteger``` function.
+- Note that this implementation creates a public property on the `uniqueInteger` function.
 - This can cause buggy or malicious code to reset the counter or set it to a non-integer, causing the function to violate the "unique" or the "integer" part of its contract.
 - You can use closures to make counter a private variable.
 
@@ -102,7 +102,7 @@ function uniqueInteger() {
 	- All variable declarations in a function (*but not any associated assignments*) are hoisted to the top of the function.
 	- This causes variables to be visible even before they are declared.
 
-```javascript
+```js
 // Function Scope
 function test(o) {
      var i = 0;                          // i is defined throughout the body of the function
@@ -133,12 +133,12 @@ function f() {
 
 - Every chunk of Javascript code (global code or functions) has a scope chain associated with it.
 - This scope chain is a chain of list of objects that defines the variables that are "in scope" for that code.
-- When Javascript needs to look up the value of a variable ```x``` (a process called **variable resolution**),
+- When Javascript needs to look up the value of a variable `x` (a process called **variable resolution**),
 	- It starts by looking at the first object in the chain.
-	- If that object has a property named ```x```, the value of that property is used.
-	- If the first object does not have a property named ```x```, Javascript continues the search with the next object in the chain.
-	- If the second object does not have a property named ```x```, the search moves on to the next object, and so on.
-	- If ```x``` is not a property of any of the objects in the scope chain, then ```x``` is not in scope for that code, and a **ReferenceError** occurs.
+	- If that object has a property named `x`, the value of that property is used.
+	- If the first object does not have a property named `x`, Javascript continues the search with the next object in the chain.
+	- If the second object does not have a property named `x`, the search moves on to the next object, and so on.
+	- If `x` is not a property of any of the objects in the scope chain, then `x` is not in scope for that code, and a **ReferenceError** occurs.
 - **Lexical scoping** means *functions are executed using the variable scope that was in effect when they were defined, not the variable scope that is in effect when they are invoked*.
 	- In order to implement lexical scoping, the internal state of a Javascript function includes not only the code of the function but also a 				reference to the scope chain then in effect.
 	- This combination of a function object and a scope (a set of variable bindings: copies of primitives and references to objects) in which the function’s variables are resolved is called a **closure**.
@@ -166,7 +166,7 @@ function f() {
 	- simultaneously allow public access to methods while retaining privacy for variables defined within the function.
 	- avoid variable hoisting from within blocks
 
-```javascript
+```js
 (function (myNamespace) {
 
     //Private Variable
@@ -192,14 +192,14 @@ function f() {
 
 #### Call() and Apply() Methods
 
-- ```f.call(o, 1, 2);```
-	- calls ```f``` passing variable ```o``` as the invocation context and ```1```,```2``` as the arguments.
-- ```f.apply(o, [1,2]);```
-	- calls ```f``` passing variable ```o``` as the invocation context and ```1```,```2``` as the arguments.
+- `f.call(o, 1, 2);`
+	- calls `f` passing variable `o` as the invocation context and `1`,`2` as the arguments.
+- `f.apply(o, [1,2]);`
+	- calls `f` passing variable `o` as the invocation context and `1`,`2` as the arguments.
 
 #### Bind() Method (ES5)
 
-```javascript
+```js
 var bindArguments = (
     !!Function.prototype.bind
 ) ?
@@ -221,13 +221,13 @@ function(context,delegate) {
 - Invoking the new function invokes the original function as a method of context.
 - It is also used for partial application (**currying**) in functional programming:
 
-```javascript
+```js
 var sum = function(x,y) { return x + y };
 var succ = sum.bind(null, 1);
 succ(2)                                  // => 3
 ```
 
-```javascript
+```js
 function f(y,z) { return this.x + y + z };
 var g = f.bind({x:1}, 2);
 g(3)                                     // => 6:
@@ -237,9 +237,9 @@ g(3)                                     // => 6:
 #### True functions vs callable objects
 - Javascript makes a subtle distinction between functions and *callable objects*. All functions are callable, but it is possible to have a callable object - that can be invoked just like a function - that is not a true function.
 - Most browser vendors use native Javascript function objects for the methods of their host objects. Microsoft, however, has always used non-native callable objects for their client-side methods, and before IE 9 the typeof operator returns "object" for them, even though they behave like functions. In IE9 these client-side methods are now true native function objects.
-- The ES3 spec says that the ```typeof``` operator returns "function" for all native objects that are callable. The ES5 specification extends this to require that ```typeof``` return "function" for all callable objects, whether native objects or host objects.
+- The ES3 spec says that the `typeof` operator returns "function" for all native objects that are callable. The ES5 specification extends this to require that `typeof` return "function" for all callable objects, whether native objects or host objects.
 
-```javascript
+```js
 function isTrueFunction(x) {
      return Object.prototype.toString.call(x) === "[object Function]";
 }

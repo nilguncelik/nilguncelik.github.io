@@ -42,6 +42,9 @@ $ git merge experiment
 
 - Now, the snapshot pointed to by C4' is exactly the same as the one that was pointed to by C5 in the merge example  – it’s only the history that is different.
 	- Rebasing makes a cleaner history. If you examine the log of a rebased branch, it looks like a linear history: it appears that all the work happened in series, even when it originally happened in parallel.
+
+![](/img/git_rebase_5.png)
+
 - Often, you’ll do this to make sure your commits apply cleanly on a remote branch – perhaps in a project to which you’re trying to contribute but that you don’t maintain. In this case, you’d do your work in a branch and then rebase your work onto `origin/master` when you were ready to submit your patches to the main project. That way, the maintainer doesn’t have to do any integration work – just a fast-forward or a clean apply.
 
 ### Merge vs Rebase
@@ -77,6 +80,8 @@ $ git merge experiment
 
 	- If you run a `git log`, you’ll see two commits that have the same author, date, and message, which will be confusing. Furthermore, if you push this history back up to the server, you’ll reintroduce all those rebased commits to the central server, which can further confuse people. It’s pretty safe to assume that the other developer doesn’t want C4 and C6 to be in the history; that’s why she rebased in the first place.
 
+	![](/img/git_rebase_6.png)
+
 
 - In general, to bring a feature branch up to date with its base branch, prefer rebasing your feature branch onto the latest base branch if you haven’t pushed this branch anywhere yet, or you know for sure that other people will not have checked out your feature branch. Otherwise, merge the latest base changes into your feature branch.
 
@@ -84,15 +89,19 @@ $ git merge experiment
 ### Conflict handling
 
 ```sh
-git checkout <branch-name>
-git rebase master
-git checkout master
-git merge <branch-name>
+$ git checkout <branch-name>
+$ git rebase master
 # if there are conflicts you can manually resolve them and execute
-git rebase --continue
+
+$ git status
+# will show you which files are in conflict
+$ git rebase --continue
 # or you can skip conflict or abort rebase:
-git rebase --skip
-git rebase --abort
+$ git rebase --skip # not recommended
+$ git rebase --abort
+
+$ git checkout master
+$ git merge <branch-name>
 ```
 
 
@@ -141,3 +150,4 @@ pick a5f4a0d added cat-file
 - [Pro Git - Book](http://git-scm.com/book)
 - <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
 - [Git Branching Model](http://www.slideshare.net/lemiorhan/git-branching-model)
+- <https://speakerdeck.com/singingwolfboy/advanced-git>

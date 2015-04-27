@@ -5,48 +5,6 @@ category: javascript
 public: true
 ---
 
-## Utility
-
-### I18n / Localization
-
-- [Polyglot by Airbnb](http://airbnb.github.io/polyglot.js/)
-- [FormatJS by Yahoo](http://formatjs.io/)
-- <http://l10ns.org/>
-
-### Number formatting and manipulation
-
-- [Numeral.js](http://numeraljs.com/)
-
-### Math
-
-- [An extensive math library for JavaScript and Node.js](http://mathjs.org/)
-
-### Form Validation
-
-- [Best jQuery plugin to validate form fields](http://formvalidation.io/)
-- <http://jondavidjohn.github.io/payform/>
-
-### Check
-
-- [is.js](http://arasatasaygin.github.io/is.js/)
-
-### Shims and Polyfills
-
-- [Webshims Lib](http://afarkas.github.io/webshim/demos/index.html#)
-
-### Text Truncation
-
-- <https://github.com/jeffchan/truncate.js>
-
-### Ajax
-
-- <http://argunner.github.io/minAjax.js/>
-
-### Database
-
-- [AlaSQL.js - JavaScript client-side SQL database supporting localStorage, IndexedDB, and Excel](https://github.com/agershun/alasql)
-
-
 ## Components
 
 ### Select
@@ -145,6 +103,56 @@ public: true
 - [StellarJS](http://markdalgleish.com/projects/stellar.js/)
 
 
+## Utility
+
+### I18n / Localization
+
+- [Polyglot by Airbnb](http://airbnb.github.io/polyglot.js/)
+- [FormatJS by Yahoo](http://formatjs.io/)
+- <http://l10ns.org/>
+
+### Number formatting and manipulation
+
+- [Numeral.js](http://numeraljs.com/)
+
+### Math
+
+- [An extensive math library for JavaScript and Node.js](http://mathjs.org/)
+
+### Form Validation
+
+- [Best jQuery plugin to validate form fields](http://formvalidation.io/)
+- <http://jondavidjohn.github.io/payform/>
+
+### Check
+
+- [is.js](http://arasatasaygin.github.io/is.js/)
+
+### Shims and Polyfills
+
+- [Webshims Lib](http://afarkas.github.io/webshim/demos/index.html#)
+
+### Text Truncation
+
+- <https://github.com/jeffchan/truncate.js>
+
+### Ajax
+
+- <http://argunner.github.io/minAjax.js/>
+
+### Database
+
+- [AlaSQL.js - JavaScript client-side SQL database supporting localStorage, IndexedDB, and Excel](https://github.com/agershun/alasql)
+
+
+### Constraints
+
+- [ConstraintJS](http://cjs.from.so/)
+	- ConstraintJS is a JS library for creating constraints — relationships between variables that are declared once and automatically maintained.
+	- An example of a simple constraint is: y is always x + 1. Setting var y = x + 1 in standard JavaScript won't work because as soon as x changes, y would be invalid. With ConstraintJS, whenever x changes, y's value automatically updates with it.
+	- ConstraintJS allows constraints to be declared between variables, DOM attributes, CSS properties, and more.
+
+
 
 ## Visualisation
 
@@ -177,6 +185,11 @@ public: true
 ## Performance
 
 - [LazyLoad Images](http://verlok.github.io/lazyload/)
+
+## Develpoment Tools
+
+- [AmokJs - Live Editing](http://amokjs.com/)
+
 
 
 **References**

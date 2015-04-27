@@ -6,15 +6,15 @@ public: true
 ---
 
 
-+ Strings, numbers and booleans are primitive types in JavaScript.
-+ But they can have **properties** and **methods**.
-+ When you refer to property of a string,number or boolean, JavaScript:
+- Strings, numbers and booleans are primitive types in JavaScript.
+- But they can have **properties** and **methods**.
+- When you refer to property of a string,number or boolean, JavaScript:
     1. converts the primitive value to an object by calling **new String()**, **new Number()** or **new Boolean()** on it.
     2. resolves property reference.
     3. discards newly created object.
-        + (JS interpreters do not necessarily create and discard this transient object, but they must behave as if they do.)
+      - (JS interpreters do not necessarily create and discard this transient object, but they must behave as if they do.)
 
-```javascript
+```js
     var s = "hello world!";
     var word = s.substring(s.indexOf(" ")+1, s.length);
 
@@ -28,10 +28,14 @@ public: true
     // this property does not exist, and the expression evaluates to *undefined*.
 ```
 
-+ The **== operator** treats a value and its wrapper object as equal but **=== operator** does not.
-+ The **typeof operator** can also show the difference between a primitive value and its wrapper object.
-+ There are no wrapper objects for the null and undefined values.
-    + Any attempt to access a property of one of these values causes a **TypeError**.
+- There are no wrapper objects for the null and undefined values.
+  - Any attempt to access a property of one of these values causes a **TypeError**.
+
+
+### Distinguishing between primitive value and its wrapper
+
+- The `==` operator treats a value and its wrapper object as equal but `===` operator does not.
+- The `typeof` operator can also show the difference between a primitive value and its wrapper object.
 
 
 **References**

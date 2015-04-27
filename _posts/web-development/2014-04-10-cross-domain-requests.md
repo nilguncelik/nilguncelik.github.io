@@ -1,7 +1,7 @@
 ---
 title: Cross Domain Requests
 author: NC
-category: internet-topics
+category: web-development
 public: true
 ---
 

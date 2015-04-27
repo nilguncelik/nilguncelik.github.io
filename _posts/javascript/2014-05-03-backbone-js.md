@@ -303,9 +303,143 @@ TodoRouter.navigate("search/milk/p2/", {trigger:true});
 TodoRouter.navigate("search/Hello%20World/p2", {trigger:true});
 ```
 
+### Best Practices
+
+- When a view is no longer displayed, if they continue to listen to their models for events they continue to stay in memory because models still retain references to them. This may cause serious memory leaks over time.
+	- You can use Backbone’s `listenTo` method when subscribing to events rather than using the `on/bind` methods directly.
+
+- Do not use data-attributes on DOM, `e.currentTarget` in handler functions and loops in templates for data that is not read-only.
+
+	```js
+	var Person = Backbone.Model.extend();
+
+	var People = Backbone.Collection.extend({
+  	model: Person
+	});
+
+	var PeopleView = Backbone.View.extend({
+	  events: {
+	    'click .person': '_personClicked'
+	  },
+	  render: function() {
+	    var renderTemplate = _.template($('#people').text());
+	    this.$el.html(renderTemplate({people: this.collection}));
+	  },
+	  _personClicked: function(e) {
+	    var personId = $(e.currentTarget).data('id');
+	    var person = this.collection.get(personId);
+	    $(e.currentTarget).text(
+	      'Nice to meet you, ' + person.get('name')
+	    );
+	  }
+	});
+	<script id="people" type="text/template">
+	  Here is our list of people:
+	  <ul>
+	    <% people.each(function(person) { %>
+	      <li class='person' data-id='<%= person.id %>'>
+	        Hi, my name is <%= person.get('name') %>
+	      </li>
+	    <% }); %>
+	  </ul>
+	</script>
+	```
+	- `_personClicked` function uses `data-id` attribute and `e.currentTarget` to identify and set the person model that is clicked.
+	- This is a bad practice. Instead use a different view for `Person`:
+
+	```js
+	var PersonView = Backbone.View.extend({
+	  tagName: 'li',
+	  events: {
+	    'click': '_clicked'
+	  },
+	  render: function() {
+	    var renderTemplate = _.template($('#person').text());
+	    this.$el.html(renderTemplate({person: this.model}));
+	    return this;
+	  },
+	  _clicked: function() {
+	    this.$el.text(
+	      'Nice to meet you, ' + this.model.get('name')
+	    );
+	  }
+	});
+	var PeopleView = Backbone.View.extend({
+	  render: function() {
+	    var renderTemplate = _.template($('#people').text());
+	    this.$el.html(renderTemplate({people: this.collection}));
+
+	    this.collection.each(function(person) {
+	      this.$('ul').append(
+	        new PersonView({model: person}).render().$el
+	      );
+	    }, this);
+	  }
+	});
+	<script id="people" type="text/template">
+	    Here is our list of people:
+	    <ul></ul>
+	</script>
+	<script id="person" type="text/template">
+	  Hi, my name is <%= person.get('name') %>
+	</script>
+	```
+
+	- Having lots of views is OK.
+	- You may rarely need to use iterators in templates, for example if you are rendering purely read-only data.
+
+- Document your use of options
+	- If you didn’t write the code, you often only find out about an option when it got used deep within a class.
+
+	```js
+	var MyView = Backbone.View.extend({
+	  initialize: function(options) {
+	    this._options = options;
+	  },
+	  // … lots more code
+	  doStuff: function() {
+	    // ... do a bunch of stuff
+	      this._options.obscureBackdoor.doSomethingCrucial();
+	    // … do a bunch more stuff
+	  }
+	  // ... do more stuff
+	});
+	```
+	- Nobody will know that the view has a dependency on an obscure backdoor until they find the options reference deep within the code.
+	- This is unfortunate because the options that a view takes constitute part of the public interface of that view.
+	- Consequently, all options that a model or view uses be documented somewhere in the class or initializer declaration
+	```js
+	/**
+	 * options:
+	 * - obscureBackdoor: a now slightly-less obscure backdoor
+	 */
+	var MyView = Backbone.View.extend({
+	  ...
+	});
+	```
+	- You can also document which options are mandatory and which aren’t actually required.
+	- You can check for the presence of mandatory options in the initialize() method of your object.
+
+- Be careful while adding new custom events.
+	- The events that an object emits constitute a part of the public interface for that object. So if you’re going to have something emit custom events, it’s really important that you document that it can do so.
+	- The most useful events are those that are well-defined, globally understood, and potentially of interest in more than just one or two special-cases. The existing Backbone built-in events meet these criteria. They can take you a long way if you fully leverage them.
+	- The one place custom events to be useful is in views that you want to reuse through your apps – for example, UI components like tabs or accordions for other views to detect what a component is doing.
+
+- Don't use templates with single root elements. Views already append their templates to a root element. This makes two nested root elements.
+
+- Always start with the UX and work backwards from there. This means working backwards from your templates and Backbone Views before trying to use fancy architectural approaches.
+
+- Don’t be afraid to have lots of view classes and – where necessary – link between them.
+
+- If you have duplicated business logic in your views, push it down into your models. If views still have to know to much about when models are being updated, start using event listeners on the models so the views don’t have to know in advance when they’re going to change. If your views are getting too big, break them down. If they are still too complicated, introduce an intermediate layer of view-models.
+
+- Have unit tests.
+
+
 
 **References**
 
 - <http://addyosmani.github.io/backbone-fundamentals/>
 - <https://www.codeschool.com/courses/anatomy-of-backbone-js>
 - <https://www.codeschool.com/courses/anatomy-of-backbone-js-part-2>
+- <http://blog.shinetech.com/2013/11/26/backbone-antipatterns/>

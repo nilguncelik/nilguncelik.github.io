@@ -1,7 +1,7 @@
 ---
 title: Website Performance Optimization
 author: NC
-category: internet-topics
+category: web-development
 public: true
 ---
 

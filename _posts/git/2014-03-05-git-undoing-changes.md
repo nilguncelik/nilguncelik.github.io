@@ -114,13 +114,14 @@ Changes to be committed:
 - The Working Directory unpacks them into actual files, which makes it much easier for you to edit them.
 
 - Git’s main purpose is to record snapshots of your project in successively better states, by manipulating these three trees.
-- git add: takes content in the Working Directory and copies it to the Index.
-- git commit: takes the contents of the Index and saves it as a permanent snapshot, creates a commit object which points to that snapshot, and updates master to point to that commit.
-- git checkout: changes HEAD to point to the new branch ref, populates your Index with the snapshot of that commit, then copies the contents of the Index into your Working Directory.
-- git reset: moves the branch that HEAD is pointing to.
+- `git add`: takes content in the Working Directory and copies it to the Index.
+- `git commit`: takes the contents of the Index and saves it as a permanent snapshot, creates a commit object which points to that snapshot, and updates master to point to that commit.
+- `git checkout`: changes HEAD to point to the new branch ref, populates your Index with the snapshot of that commit, then copies the contents of the Index into your Working Directory.
+- `git reset`: moves the branch that HEAD is pointing to.
 	- If you’re currently on the master branch, running `git reset --soft HEAD^` will make master and HEAD point to HEAD^.
 		- This essentially undoes the last `git commit` command. It moves the branch back to where it was, without changing the Index or Working Directory.
 		- You could now update the Index and run git commit again to accomplish what `git commit --amend` would have done.
+		- The previous HEAD will get cleaned up by git's garbage collector eventually or by running `git gc` manually.
 	- If you’re currently on the master branch, running `git reset (--mixed) HEAD^` will make master and HEAD point to HEAD^. And then update the Index with the contents of HEAD^.
 		- This is the default mode.
 		- It still undoes your last commit, but also unstages everything. You rolled back to before you ran all your `git add` and `git commit` commands.

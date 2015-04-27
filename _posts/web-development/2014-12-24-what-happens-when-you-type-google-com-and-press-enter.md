@@ -1,7 +1,7 @@
 ---
 title: What happens when you type google.com into your browser and press enter?
 author: NC
-category: internet-topics
+category: web-development
 public: true
 ---
 

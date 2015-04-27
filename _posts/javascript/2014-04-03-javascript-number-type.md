@@ -9,12 +9,12 @@ public: true
 - All numbers in Javascript are represented as floating-point values.
 - Javascript represents numbers using the 64-bit floating-point format.
 - Certain operations in Javascript (such as array indexing and the bitwise operators) are performed with 32-bit integers.
-- ```a = 5/2; // evaluates to 2.5, not 2.```
-    - In Javascript, all numbers are floating-point, so all division operations have floating-point results.
+- All numbers are floating-point, so all division operations have floating-point results.
+  - `a = 5/2;         // evaluates to 2.5, not 2.`
 
 #### Rounding Errors
 
-```
+```js
 var x = .3 - .2;
 var y = .2 - .1;
 x == y         // => false
@@ -27,7 +27,7 @@ y == .1        // => true: .2-.1 is equal to .1
 
 #### Infinity, Not-a-number, Zero, Negative Zero
 
-```
+```js
 Infinity  = Number.POSITIVE_INFINITY = 1/0 = Number.MAX_VALUE + 1
 -Infinity = Number.NEGATIVE_INFINITY = -1/0 = -Number.MAX_VALUE - 1
 NaN = Number.NaN = 0/0
@@ -42,7 +42,7 @@ Number.MIN_VALUE/2 = 0
 - ```isFinite()``` function returns true if its argument is a number other than ```NaN```, ```Infinity```, or ```-Infinity```.
 - The negative zero value compares equal to positive zero, which means that the two values are almost indistinguishable, except when used as a divisor:
 
-```
+```js
 var zero = 0;                   // Regular zero
 var negz = -0;                  // Negative zero
 zero === negz                   // => true: zero and negative zero are equal

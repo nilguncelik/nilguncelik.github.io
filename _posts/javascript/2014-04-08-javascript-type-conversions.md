@@ -9,7 +9,7 @@ See  <https://www.inkling.com/read/javascript-definitive-guide-david-flanagan-6t
 
 
 #### String to Number Conversion
-```
+```js
 new Number("3 blind mice")  // NaN, returns Wrapper object
 new Number("11", 2)         // 11, only works for base-10 integers , returns Wrapper object
 new Number("077", 8)        // 77, only works for base-10 integers , returns Wrapper object
@@ -21,9 +21,11 @@ parseInt("blind 3 mice")    // => NaN
 parseInt("11", 2)           // => 3 , returns primitive number type
 parseInt("077", 10)         // => 77 , returns primitive number type
 parseInt("0xFF")            // => 255, returns primitive number type
-parseInt(".1")              // => NaN: integers can't start with ".", returns primitive number type
+parseInt(".1")              // => NaN: integers can't start with ".",
+							// returns primitive number type
 parseFloat(" 3.14 meters")  // => 3.14, returns primitive number type
-parseFloat("$72.47")        // => NaN: numbers can't start with "$", returns primitive number type
+parseFloat("$72.47")        // => NaN: numbers can't start with "$",
+							// returns primitive number type
 ```
 
 **References**
