@@ -63,7 +63,7 @@ var r = new RegExp("js");   // Create a RegExp object for pattern matching.
 	- Javascript first creates a new empty object, just like the one created by the object initializer {} .
 	- *This new object inherits from the prototype property of the constructor*.
 	- Then, it invokes the specified function with the specified arguments, passing the new object as the value of the this keyword.
-	- The function can then use this to initialize the properties of the newly created object.
+	- The function can then use `this` to initialize the properties of the newly created object.
 	- Functions written for use as constructors do not return a value, and the value of the object creation expression is the newly created and initialized object.
 	- If a constructor does return an object value, that value becomes the value of the object creation expression and the newly created object is discarded.
 	- If the constructor uses return with no value, or if it returns a primitive value the return value is discarded and the value of the object creation expression is the newly created and initialized object.

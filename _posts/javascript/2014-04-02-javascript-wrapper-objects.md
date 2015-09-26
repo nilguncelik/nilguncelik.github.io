@@ -15,17 +15,17 @@ public: true
       - (JS interpreters do not necessarily create and discard this transient object, but they must behave as if they do.)
 
 ```js
-    var s = "hello world!";
-    var word = s.substring(s.indexOf(" ")+1, s.length);
+var s = 'hello world!';
+var word = s.substring(s.indexOf(' ') + 1, s.length);
 
-    var s = "test";
-    s.len = 4;
-    // creates a temporary String object, sets its len property to 4,
-    // and then discards that object.
-    var t = s.len;
-    // creates a new String object from the original (unmodified) string
-    // value and tries to read the len property.
-    // this property does not exist, and the expression evaluates to *undefined*.
+var s = 'test';
+s.len = 4;
+// creates a temporary String object, sets its len property to 4,
+// and then discards that object.
+var t = s.len;
+// creates a new String object from the original (unmodified) string
+// value and tries to read the len property.
+// this property does not exist, and the expression evaluates to *undefined*.
 ```
 
 - There are no wrapper objects for the null and undefined values.
