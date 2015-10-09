@@ -26,6 +26,7 @@ public: true
 	- If both values are strings and contain exactly the same 16-bit values in the same positions, they are equal. If the strings differ in length or content, they are not equal.
 		- Two strings may have the same meaning and the same visual appearance, but still be encoded using different sequences of 16-bit values. Javascript performs no Unicode normalization, and a pair of strings like this are not considered equal to the `===` or to the `==` operators. `String.localeCompare()` can be used to compare these strings.
 	- If both values refer to the same object, array, or function, they are equal. If they refer to different objects they are not equal, even if both objects have identical properties.
+- Douglas Crockford recommends always using strict equality operator.
 
 ## Equality operator `==`
 - It is like the `===` operator, but it is less strict. If the values of the two operands are not the same type, it attempts some type conversions and tries the comparison again:

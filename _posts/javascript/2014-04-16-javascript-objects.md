@@ -69,6 +69,9 @@ var r = new RegExp("js");   // Create a RegExp object for pattern matching.
 	- If the constructor uses return with no value, or if it returns a primitive value the return value is discarded and the value of the object creation expression is the newly created and initialized object.
 - Core Javascript includes built-in constructors for native types.
 - You can also define your own constructor functions to initialize newly created objects.
+- Some programmers consider using `new` keyword harmful because if you forget to include the `new` prefix when calling a constructor function, then `this` will not be bound to the new object. Sadly, this will be bound to the global object, so instead of augmenting your new object, you will be clobbering global variables. That is really bad. There is no compile warning, and there is no runtime warning. This problem is fixed in ES5 strict mode. In strict mode, `this` is no longer bound to the global object but to `undefined`.
+    - Douglas Crockford also argues against use of `new` and `this` keyword in this manner to create an object and proposes another way to use constructor functions without use of `new` operator. // TODO how does he propose to do it?
+- Crockford also suggests naming constructor functions with InitialCaps and nothing else with InitialCaps to identify the cases where `new` keyword is missing.
 
 #### Object Creation with Object.create():
 ```

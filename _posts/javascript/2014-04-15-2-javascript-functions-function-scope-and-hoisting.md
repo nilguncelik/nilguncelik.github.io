@@ -38,9 +38,16 @@ function f() {
 }
 ```
 
-- Since Javascript does not have block scope, some programmers make a point of declaring all their variables at the top of the function, rather than trying to declare them closer to the point at which they are used. This technique makes their source code accurately reflect the true scope of the variables.
+- The `var` statement gets split into two parts:
+    - The declaration part gets hoisted to the top of the function initializing with undefined.
+    - The initialization part turns into an ordinary statement.
+
+- Since Javascript does not have block scope, some programmers make a point of declaring all their variables at the top of the function, rather than trying to declare them closer to the point at which they are used. This technique makes their source code accurately reflect the true scope of the variables. This style also suggested by Douglas Crockford.
 - There is one exception to function scope :
 	- The identifiers associated with a catch clause has block scope - they are only defined within the catch block.
+
+- The `let`/`const`/`class` statements in ES6 have block scopes. Their declerations are hoisted to the top but is not initialized with `undefined`. Therefore it is an error if you try to use them before the point they are declared.
+
 
 **References**
 
