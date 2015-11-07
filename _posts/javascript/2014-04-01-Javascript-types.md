@@ -29,7 +29,7 @@ Object (Reference) Types
 + **Arrays** are special kind of objects, that represents an ordered collection of numbered values.
 + **Functions** are another special kind of objects that have executable code associated with it. They represent computations to be performed.
 + Functions that are written ( to be used with the new operator) to initialize a newly created object are known as **constructors**.
-+ In addition to the Array and Function classes, core Javascript defines three other classes: The **Date class**, the **RegExp class** and the **Error class**.
++ In addition to the **Array** and **Function** classes, core Javascript defines other classes: **Date class**, **RegExp class**, **Error class** and wrapper classes: **Number class**, **Boolean class**, **String class**.
 + Strict equality operator (===) considers them to be equal only if they **refer to** the same instance in the memory.
 
 

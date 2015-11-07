@@ -90,7 +90,8 @@ a.length = 0;                                           // a is unchanged.
 	- It returns an array of the deleted elements, or an empty array if no elements were deleted.
 	- It inserts arrays themselves, not the elements of those arrays.
 	- It modifies the array on which it is invoked.
-
+- isArray // TODO
+// TODO
 ```js
 var a = [1,2,3,4,5];
 a.splice(2,0,'a','b');      // Returns []; a is [1,2,'a','b',3,4,5]

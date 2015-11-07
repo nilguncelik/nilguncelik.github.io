@@ -44,7 +44,7 @@ public: true
 
 - Wrapping your IIFE's in parenthesis is mandatory for some cases where it causes ambiguity for the JavaScript parser.
 
-- But it is still a good idea to use the parenthesis for better code readability. The parens typically indicate that the function expression will be immediately invoked, and the variable will contain the result of the function, not the function itself. This can save someone reading your code the trouble of having to scroll down to the bottom of what might be a very long function expression to see if it has been invoked or not.
+- But it is still a good idea to use the parenthesis for better code readability. The parens indicate that the function expression will be immediately invoked, and the variable will contain the result of the function, not the function itself. This can save someone reading your code the trouble of having to scroll down to the bottom of what might be a very long function expression to see if it has been invoked or not.
 
 ```js
 // Either of the following two patterns can be used to immediately invoke
@@ -53,8 +53,6 @@ public: true
 (function(){ /* code */ }()); // Crockford recommends this one
 (function(){ /* code */ })(); // But this one works just as well
 ```
-
-Because the point of the parens or coercing operators is
 
 - It is mandatory to use parens to disambiguate between function expressions and function declarations. If you are to specify a name for the IIFE function you should use parens to prevent the parser throwing a SyntaxError. This is due to the following rules:
     - Parens placed after an expression indicate that the expression is a function to be invoked.

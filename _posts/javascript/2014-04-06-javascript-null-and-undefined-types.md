@@ -29,8 +29,7 @@ public: true
 - `null` and `undefined` both indicate an absence of value and can often be used interchangeably.
 - The equality operator `==` considers them to be equal. (Use `===` to distinguish them.)
 - Using `.` or `[]` to access a property or method of these values causes a **TypeError**.
-- If you need to assign one of these values to a variable or property or pass one of these values to a function, `null` is almost always the right choice.
-
+- When you retrieve a value of a property on an object and see its value is `undefined` you don't know if that property is missing or that property have a value of `undefined`. Therefore if you need to assign one of these values to a variable or property or pass one of these values to a function, `null` is almost always the right choice.
 ---
 
 ### Overriding `undefined`

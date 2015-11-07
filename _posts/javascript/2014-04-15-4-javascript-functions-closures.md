@@ -60,6 +60,45 @@ environment for ((y) => x)(2) =
 
 
 
+- Closure is the mechanism for a language with functions as first class members to be useful. If functions could be passed around as values but could not remember their lexical scope, nobody would pass functions around.
+
+- When you execute a function it creates a scope object, if there is anybody having a reference to the scope object via closure, that scope object is not garbage collected.
+
+- Creating a closure via IIFE's to create copies of loop variables:
+```js
+for ( var i = 0; i < 5; i++) {
+    setTimeout(function(){
+        console.log(i);
+    }, i * 1000);
+}
+// outputs: 5, 5, 5, 5, 5
+// we need to create copy of i per iteration
+for ( var i = 0; i < 5; i++) {
+    (function(i) {
+        setTimeout(function(){
+            console.log(i);
+        }, i * 1000);
+    }(i));
+}
+// outputs: 0, 1, 2, 3, 4
+
+// Note that if were to use let keyword instead of var for the i variable, according to the es6 spec, a new variable is allocated in each loop. Therefore the first version would work as requested with let keyword.
+for ( let i = 0; i < 5; i++) {
+    setTimeout(function(){
+        console.log(i);
+    }, i * 1000);
+}
+// outputs: 0, 1, 2, 3, 4
+
+for ( var i = 0; i < 5; i++) {
+    let j = i;   // block scoped
+    setTimeout(function(){
+        console.log(j);
+    }, j * 1000);
+}
+// outputs: 0, 1, 2, 3, 4
+```
+
 #### Scope Chain
 
 - Every chunk of Javascript code (global code or functions) has a **scope chain** associated with it.
@@ -74,7 +113,7 @@ environment for ((y) => x)(2) =
 	- If the second object does not have a property named `x`, the search moves on to the next object, and so on.
 	- If `x` is not a property of any of the objects in the scope chain, then `x` is not in scope for that code, and a **ReferenceError** occurs.
 
-#### Lexical Scope (Static Scope or Closure)
+#### Lexical Scope (Compile Time Scope or Static Scope or Closure)
 
 - **Lexical scoping** means **functions are executed using the variable scope that was in effect when they were defined, not the variable scope that is in effect when they are invoked (calling context)**.
 	- When resolving a variable in JavaScript it is looked up in the environment where they are declared allowing us to determine which declaration it belongs to by looking at the source code.
@@ -82,6 +121,7 @@ environment for ((y) => x)(2) =
 	- In practice, with lexical scope a variable's definition is resolved by searching its containing block or function, then if that fails searching the outer containing block, and so on, whereas with dynamic scope the calling function is searched, then the function which called that calling function, and so on.
 	- Lexical resolution can be determined at compile time and is also known as early binding, while dynamic resolution can only be determined at run time, and thus is known as late binding.
 
+- Decisions about how all the scoping will occur are made at compiler's lexical phase.
 
 - In order to implement lexical scoping, **the internal state of a Javascript function includes not only the code of the function but also a reference to the scope chain then in effect**.
 - This combination of a function object and a scope in which the function’s variables are resolved is called a **closure**.
@@ -133,6 +173,80 @@ testList();
 
 
 - Closures reduce the need to pass state around the application. The inner function has access to the variables in the outer function so there is no need to store the state data at a global place that the inner function can get it.
+
+
+- The name closure comes from the fact that inner scopes "enclose" outer scopes, having access to variables in them.
+![](/img/javascript_closures.png)
+
+#### Lazy instantiation
+
+```js
+var digit_name = (function(n) {
+    var names = ['zero', 'one', 'two', 'three'];
+    return function(n) {
+        return names[i];
+    }
+}());
+alert(digit_name(3));
+```
+- Above definition of `digit_name` function is immediately invoked event if the function is never called and the `names` array . Instead we could have rewrite it like this:
+
+```js
+var digit_name = function(n) {
+    var names = ['zero', 'one', 'two', 'three'];
+    digit_name = function(n) {
+        return names[i];
+    };
+    return digit_name(n);
+};
+alert(digit_name(3));
+```
+- But this is not recommended for a couple of reasons:
+    - The value of `digit_name` is changing during execution which causes confusion.
+    - If this function is passed as parameter and called from there, the caller function does not see that the name changed and pays the cost of creating `name` array each time it invokes `digit_name` function. This breaks the first classness of `digit_name` function.
+    - This is premature optimization.
+- We could have avoided the above problem by:
+```js
+var digit_name = (function(n) {
+    var names;
+    return function(n) {
+        if(!names) {
+            names = ['zero', 'one', 'two', 'three'];
+        }
+        return names[i];
+    };
+}());
+alert(digit_name(3));
+```
+- Still this is a tiny optimization and the source of problem is invoking it a million times which have other consequences and you wont notice the payoff here.
+
+
+#### Making functions within a loop
+
+- It is problematic because the function closes over the loop's variables, not to their current values:
+```js
+for(var i ...) {
+    var div_id = divs[i].id;
+    divs[i].onclick = function() {
+        alert(div_id);
+    }
+}
+```
+- Instead
+```js
+var i;
+function make_handler(div_id) {
+    return function() {
+        alert(div_id);
+    }
+}
+for(, ...) {
+    var div_id = divs[i].id;
+    divs[i].onclick = make_handler(div_id);
+}
+```
+
+
 
 **References**
 

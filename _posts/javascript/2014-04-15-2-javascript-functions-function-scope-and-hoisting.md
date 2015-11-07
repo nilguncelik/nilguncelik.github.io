@@ -46,8 +46,13 @@ function f() {
 - There is one exception to function scope :
 	- The identifiers associated with a catch clause has block scope - they are only defined within the catch block.
 
-- The `let`/`const`/`class` statements in ES6 have block scopes. Their declerations are hoisted to the top but is not initialized with `undefined`. Therefore it is an error if you try to use them before the point they are declared.
+- The `let`/`const`/`class` statements in ES6 have block scopes. Their declarations are hoisted to the top but is not initialized with `undefined`. Therefore it is an error if you try to use them before the point they are declared.
 
+- Without hoisting it is not possible to create mutual recursive functions. Because one or the other would complain about not finding the definition of the the mutual function.
+
+- Inclusion headers in C or C++ are kinda like manual hoisting of definitions in a file.
+
+- Hoisting is just a conceptual model to describe the behavior of javascript language. What is happening actually is that the compiler makes a first pass through the code and declares all variables within their lexical scopes.
 
 **References**
 

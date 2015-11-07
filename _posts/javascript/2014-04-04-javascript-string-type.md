@@ -46,6 +46,18 @@ lastIndexOf( text )
 split( text )                             // returns new string array
 replace( text1 , text2  )                 // returns new string (Strings are immutable)
 toUpperCase()                             // returns new string (Strings are immutable)
+charCodeAt
+compareLocale
+concat
+localeCompare
+match
+search
+toLocaleUpperCase
+toLocaleLowerCase
+toLowerCase
+toString
+trim
+valueOf
 ```
 
 

@@ -1,11 +1,11 @@
 ---
-title: Javascript Functions - Naming Functions
+title: Javascript Functions - Function Expressions vs Declarations
 author: NC
 category: javascript
 public: true
 ---
 
-#### Function Definition Expressions
+#### Function (Definition) Expressions
 
 
 ```js
@@ -19,7 +19,7 @@ function(x) { return x + 1; }
 	- Invocation: `func(function(x) { return x+1; });`
 
 
-#### Naming Function Definition Expressions
+#### Naming Function (Definition) Expressions
 
 
 - When we write
@@ -29,7 +29,7 @@ var repeat = (str) => str + str
 
 - We don't name the function as `repeat` for the same reason that `var answer = 42` doesn’t name the number `42`. It binds an anonymous function to a name in an environment, but the function itself remains anonymous.
 
-- To name a function we insert a variable between the function keyword and parameters:
+- To name a function expressions, we insert a variable between the function keyword and parameters:
 
 ```js
 
@@ -38,6 +38,7 @@ var repeat = (str) => str + str
 
 var bindingName = function actualName () {
   //... actualName is only defined here and can be used for recursion.
+  //... bindingName is also defined here but it can be overridden later in code or even be shadowed in this function, therefore it is not reliable.
 };
 
 bindingName
@@ -52,10 +53,15 @@ bindingName.name
 
 - There is no named form of arrow functions.
 
+- It is strongly advised to always name your function expressions i.e. do not use anonymous functions for 3 reasons:
+    - The name provides a way to refer to yourself.
+        - e.g. for recursion or unbinding from an event handler.
+     - The name shows up in debug stack traces instead of the name `anonymous function`.
+     - The name self documents the code.
+- Even when you are assigning a function to a property of an object, you should name the function expression.
+#### Function Declaration (Statement)
 
-#### Function Declaration Statement
-
-- Function declaration statements are a lot like function definitions:
+- Function declaration statements are a lot like function definitions. They differ in that with function declarations the statement always starts with `function` keyword.
 
 ```js
 function someName(x) {

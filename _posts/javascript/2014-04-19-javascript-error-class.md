@@ -6,22 +6,22 @@ public: true
 ---
 
 
-- The ```Error``` constructor creates an error object.
-- Instances of ```Error``` objects are thrown when runtime errors occur.
-- The ```Error``` object can also be used as a base object for user-defined exceptions.
+- The `Error` constructor creates an error object.
+- Instances of `Error` objects are thrown when runtime errors occur.
+- The `Error` object can also be used as a base object for user-defined exceptions.
 
 #### Throwing errors:
-- ```throw expression;```
+- `throw expression;`
 - expression may evaluate to a value of any type. You might throw a number that represents an error code or a string that contains a human-readable error message.
 
-```
+```js
 if (x < 0)
-throw new Error("x must not be negative");
+    throw new Error("x must not be negative");
 ```
 
 #### Error Handling
 
-````
+```js
 try {
   // ..
 } catch (e) {
@@ -31,7 +31,7 @@ try {
     // ..
   }
 }
-````
+```
 
 - Unlike any other identifiers, the identifiers associated with a catch clause has block scope — they are only defined within the catch block.
 
