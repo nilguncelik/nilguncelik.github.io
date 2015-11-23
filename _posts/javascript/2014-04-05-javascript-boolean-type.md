@@ -17,10 +17,6 @@ public: true
 	- executes body only if `o` is not `null` or `undefined`.
 
 
-
-
-
-
 **References**
 
 [JavaScript: The Definitive Guide, 6th Edition](http://shop.oreilly.com/product/9780596805531.do)
