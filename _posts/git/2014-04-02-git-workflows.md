@@ -21,7 +21,7 @@ public: true
 
 
 
-### Supporting Branches
+### Supporting Branches
 
 - They have limited life time and will ve removed eventually.
 - They have specific purpose and strict rules for originating and target branches.
@@ -40,29 +40,29 @@ public: true
 
 ```sh
 #clone the remote repo
-$ git checkout -b my_new_feature
+$ git checkout -b my_new_feature
 #..work and commit some stuff ( WIP - work in progress)
-$ git rebase development
+$ git rebase development
 #..work and commit some stuff
-$ git rebase development
+$ git rebase development
 #..finish the feature
 
 # one option:
 $ git rebase -i origin/master
 # squash your commits
-$ git checkout development
-$ git merge my_new_feature
+$ git checkout development
+$ git merge my_new_feature
 
 # another option:
-$ git checkout development
-$ git merge --squash my_new_feature
+$ git checkout development
+$ git merge --squash my_new_feature
 
 # If you are making a bug fix, squash the commits down into
 # one and exactly one commit that completely represents that bug fix.
 # Half of a bug fix is useless!
 
 
-$ git commit -m "added my_new_feature"
+$ git commit -m "added my_new_feature"
 $ git branch -D my_new_feature
 ```
 - <http://stackoverflow.com/questions/457927/git-workflow-and-rebase-vs-merge-questions>

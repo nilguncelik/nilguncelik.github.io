@@ -198,19 +198,15 @@ $ git branch -vv
 
 ### Deleting a remote branch:
 
-```sh
-git push <remote> --delete <branch>
-```
-
+`git push <remote> --delete <branch>`
 - This removes the pointer and the data from the server.
 
-```sh
-git push <remote> :<branch name>
-# deletes remote branch but does not remove local one.
-git remote prune origin
-# when remote repository is deleted by someone else, you have dangling reference to remote branch.
-# this command removes that reference and the repository becomes a local one.
-```
+`git push <remote> :<branch name>`
+- Deletes remote branch but does not remove local one.
+
+`git remote prune origin`
+- When remote repository is deleted by someone else, you have dangling reference to remote branch. This command removes that reference and the repository becomes a local one.
+
 
 
 
