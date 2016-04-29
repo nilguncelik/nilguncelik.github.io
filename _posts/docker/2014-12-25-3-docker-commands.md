@@ -68,17 +68,10 @@ public: true
 `docker exec -it <CID> env TERM=xterm top`
 
 
-
 # Networking
 ### assign host's port 49168 to containers port 8080.
 `docker run -p 49168:8080 -d <image-name>`
 - i.e. you can access to web server running on port 8080 in the container by issuing following command: "curl -i localhost:49168"
-
-
-
-
-
-
 
 
 **References**
