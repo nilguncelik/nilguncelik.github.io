@@ -4,9 +4,8 @@ url:
 baseurl: "/"
 permalink: "/blog/:categories/:year/:month/:day/:title.html"
 paginate_path: "/blog/page:num/"
-relative_permalinks: false
 paginate: 5
-highlighter: pygments
+highlighter: rouge
 defaults:
 - scope:
     path: ''
