@@ -17,7 +17,7 @@ There are two major ways to work with docker.
 - You write your application and make configurations.
 - Commit your app and configuration.
 - Checkout your instance on another machine and use.
-- This is way is not recommended.
+- This way is not recommended.
 
 ```sh
 $ docker run -i -t debian /bin/bash
@@ -44,6 +44,12 @@ $ docker build -t <image-name> <directory>
 ```
 - [Reference for writing Dockerfiles](https://docs.docker.com/reference/builder/).
 - Docker encourage immutable deployment units. You should not ssh into container and do upgrades. Instead just change the version number of the base image and then rebuilt your application container and deploy it. If you start to connect with ssh to your container then you break the nature of immutability and you are creating something that is not exactly reproducible.
+
+
+- Docker workflow:
+Build: Docker Toolbox. output: image?
+Ship: Docker Hub Registry, your local registry
+Run: Any vm capable of running docker containers.
 
 
 **References**
