@@ -5,44 +5,67 @@ category: git
 public: true
 ---
 
-1. Fork project into your workspace.
-
-2. Create a topic branch from master.
-
-	```sh
-	￼$ git clone https://github.com/<your-user>/<project>
-	$ cd project
-	$ git checkout -b new-topic
-	```
+1. Fork a project repo into your workspace. http://help.github.com/fork-a-repo/
+2. Clone the project to your local machine (**username** - your Github user account name.):
+```bash
+git clone git@github.com:<github-user-account-name>/<project-name>.git
+```
+3. Add actual repo to your remotes as `upstream`:
+```bash
+cd <project-name>
+git remote add upstream git://github.com/<actual-repo-account-name>/<project-name>.git
+```
+4. Create a branch for new check:
+```bash
+git checkout -b my-new-check
+```
 	-  It’s easier to have a `master` branch always track `origin/master` and to do your work in topic branches.
 		- You can easily discard if they’re rejected.
 		- You can rebase your work if the tip of the main repository has moved in the meantime and your commits no longer apply cleanly.
 		- You can submit a second topic of work to the project parallelly.
-
-3. Make some commits to improve the project.
-
-	```sh
-	$ git diff --word-diff
-
-	$ git commit -a
-	```
-
-4. Push this branch to your GitHub project.
-
-	```sh
-	$ git push origin new-topic
-	```
-
+5. Develop on **my-new-check** branch only, but **Do not merge my-new-check branch to the your master (as it should stay equal to upstream master)!!**
+6. Commit changes to **my-new-check** branch:
+```bash
+git add .
+git commit -m "commit message"
+```
+7. Push branch to GitHub, to allow your mentor to review your code:
+```bash
+$ git push origin my-new-check
+```
 	- It’s easiest to push the topic branch you’re working on up to your repository, rather than merging into your master branch and pushing that up. The reason is that if the work isn’t accepted or is cherry picked, you don’t have to rewind your master branch. If the maintainers merge, rebase, or cherry-pick your work, you’ll eventually get it back via pulling from their repository.
 	- You may want to use `rebase -i` to squash your work down to a single commit, or rearrange the work in the commits to make the patch easier for the maintainer to review.
-
-5. Open a PR on GitHub.
+8. Repeat steps 5-7 till development is complete.
+9. Pull upstream changes that were done by other contributors on master:
+```bash
+git checkout master
+git pull --rebase upstream master
+```
+10. Rebase **my-new-check** branch on top of the upstream master:
+```bash
+git checkout my-new-check
+git pull --rebase upstream master
+```
+11. In the process of the **rebase**, it may discover conflicts. In that case it will stop and allow you to fix the conflicts. After fixing conflicts, use **git add .** to update the index with those contents, and then just run:
+```bash
+git rebase --continue
+```
+12. Push branch to GitHub (with all your final changes and actual code of <project-name>):
+We forcing changes to your issue branch(our sand box) is not common branch, and rebasing means recreation of commits so no way to push without force. NEVER force to common branch.
+```bash
+git push origin my-new-check --force
+```
+13. Created build for testing and send it to any mentor for testing.
+14. Only after all testing is done - Send a "Pull Request":http://help.github.com/send-pull-requests/.
+	- Please recheck that in your pull request you send only your changes, and no other changes.
+		Check it by command:
+		```bash
+		git diff my-new-check upstream/master
+		```
 	- Enter title and description.
 	- Github also shows list of the commits in our topic branch that are "ahead" of the master branch and a unified diff of all the changes that will be made should this branch get merged by the project owner.
 
-6. Discuss, and optionally continue committing.
-
-7. The project owner merges or closes the PR.
+15. The project owner merges or closes the PR.
 	- If the merge is trivial, he just hits the "Merge" button on the GitHub site.
 		- This will do a "non-fast-forward" merge, creating a merge commit even if a fast-forward merge is possible.
 		- Many projects don’t really think of PRs as queues of perfect patches that should apply cleanly in order, instead as iterative conversations around a proposed change, culminating in a unified diff that is applied by merging.
@@ -220,3 +243,4 @@ $ git diff master...contrib
 
 **References**
 - [Pro Git - Book](http://git-scm.com/book)
+- <https://github.com/sevntu-checkstyle/sevntu.checkstyle/wiki/Development-workflow-with-Git:-Fork,-Branching,-Commits,-and-Pull-Request>

@@ -144,6 +144,9 @@ public: true
 
 - [AlaSQL.js - JavaScript client-side SQL database supporting localStorage, IndexedDB, and Excel](https://github.com/agershun/alasql)
 
+### Timeline
+
+- [Timeline.js](http://timeline.knightlab.com/)
 
 ### Constraints
 
