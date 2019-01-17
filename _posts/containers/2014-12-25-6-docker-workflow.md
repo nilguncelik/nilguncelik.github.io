@@ -20,7 +20,7 @@ There are two major ways to work with docker.
 - This way is not recommended.
 
 ```sh
-$ docker run -i -t debian /bin/bash
+$ docker container run -i -t debian /bin/bash
 $ apt-get install postgresql-9.3
 $ docker ps
 $ docker commit <CID> username/postgresql

@@ -9,36 +9,29 @@ public: true
 ### Git States
 
 **Committed/Unmodified**
-
 - Data is safely stored in your database.
 
 
 **Modified**
-
 - You have changed the file but have not committed it to your database yet.
 
 **Staged**
-
 - You have marked a modified file in its current version to go into your next commit snapshot.
 
 **Untracked**
-
 - A newly created file.
 
 **Ignored**
-
 - File is ignored by Git.
 
 
 ### Git Directories
 
 **Git Directory**
-
 - It is where Git stores the metadata and object database for your project. This is what is copied when you clone a repository from another computer.
 - Git tracks a pointer called HEAD which points to the last commit you have made in the current branch in this directory.
 
 **Working Directory**
-
 - It is a single checkout of one version of the project. These files are pulled out of the compressed database in the Git directory and placed on disk for you to use or modify.
 - Each file in your working directory can be in one of 2 states: tracked or untracked.
 	- Tracked files are files that were in the last snapshot.
@@ -46,7 +39,6 @@ public: true
 	- Untracked files are any files in your working directory that were not in your last snapshot and are not in your staging area.
 
 **Staging Area/Index**
-
 - It is a simple file, generally contained in your Git directory, that stores information about what will go into your next commit.
 - You use this area to restrict your commit only a subset of the changed files in your working directory.
 
